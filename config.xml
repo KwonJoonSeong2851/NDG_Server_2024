@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<App>
+  <Name>NDG Server</Name>
+  <Server>
+    <IP>127.0.0.1</IP>
+    <Port>9000</Port>
+    <ThreadCount>5</ThreadCount>
+  </Server>
+  <Terminal></Terminal>
+  <Log>
+    <Path>./Log/LoginLog.log</Path>
+    <Prefix>System</Prefix>
+    <Type>WithFile</Type>
+  </Log>
+  <Task>
+    <ThreadCount>5</ThreadCount>
+  </Task>
+  <Contents>
+    <ThreadCount>5</ThreadCount>
+  </Contents>
+  <DataBase>
+    <ServerName>49.50.174.122</ServerName>
+    <ThreadCount>2</ThreadCount>
+    <DB>GameDB</DB>
+    <Login>GameUser</Login>
+    <Password>1234</Password>
+  </DataBase>
+</App>
