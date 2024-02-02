@@ -1,12 +1,12 @@
 #pragma once
 #include "../stdafx.h"
-#include "Server.h"
-
+//#include "../Network/Server.h"
 
 #define MAX_IOCP_THREAD SIZE_64
 
 class Thread;
 class Server;
+class ContentsProcess;
 
 /// <summary>
 /// Server 클래스를 상속받아 IOCP 서버로 세부 구현한 클래스입니다.

@@ -19,7 +19,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//유니코드 언어 설정
 	_wsetlocale(LC_ALL, L"korean");
 
-	DBManager::GetInstance().Run();
+	//DBManager::GetInstance().Run();
 
 	WSADATA wsa;
 	WSAStartup(MAKEWORD(2, 2), &wsa);

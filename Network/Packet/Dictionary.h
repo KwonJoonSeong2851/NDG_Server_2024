@@ -1,8 +1,9 @@
 #pragma once
-#include "Object.h"
-#include "wstring_.h"
-#include "generic_.h"
-#include <unordered_map>
+#include "../../stdafx.h"
+//#include "Object.h"
+//#include "wstring_.h"
+//#include "generic_.h"
+//#include <unordered_map>
 
 class Dictionary : public Object
 {

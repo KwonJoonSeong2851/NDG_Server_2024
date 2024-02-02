@@ -1,6 +1,6 @@
-#include "../stdafx.h"
 #include "ServerIOCP.h"
-#include "IOCPSession.h"
+
+
 
 IOCPServer::IOCPServer(ContentsProcess* contentProcess) :Server(contentProcess)
 {

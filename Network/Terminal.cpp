@@ -46,38 +46,38 @@ const char* Terminal::GetIp()
 
 void Terminal::ConnectProcess() 
 {
-CONNECT_START:
-	int tryCount = 0;
-
-	while (_shutdown == false)
-	{
-		if (m_session.ConnectTo(m_ip, m_port))
-		{
-			break;
-		}
-		SLOG(L"Terminal : try connect [%s] server[%s]:[%d]... [%d]", m_name.c_str(), m_ip, m_port, tryCount++);
-		Sleep(1000);
-		m_status = TERMINAL_READY;
-
-		//터미널 세션 알림
-		PK_I_NOTIFY_TERMINAL terminalPacket;
-		this->SendPacket(&terminalPacket);
-
-		SLOG(L"Terminal : [%s] connect [%S]:[%d] ready", m_name.c_str(), m_ip, m_port);
-		while (_shutdown == false)
-		{
-			Package* package = m_session.OnRecv(0);
-
-			if (package == nullptr)
-			{
-				SLOG(L"Terminal : [%s] disconnected !!!", m_name.c_str());
-				m_session.OnClose();
-				goto CONNECT_START;
-			}
-
-			m_server->PutPackage(package);
-		}
-	}
+//CONNECT_START:
+//	int tryCount = 0;
+//
+//	while (_shutdown == false)
+//	{
+//		if (m_session.ConnectTo(m_ip, m_port))
+//		{
+//			break;
+//		}
+//		SLOG(L"Terminal : try connect [%s] server[%s]:[%d]... [%d]", m_name.c_str(), m_ip, m_port, tryCount++);
+//		Sleep(1000);
+//		m_status = TERMINAL_READY;
+//
+//		//터미널 세션 알림
+//		PK_I_NOTIFY_TERMINAL terminalPacket;
+//		this->SendPacket(&terminalPacket);
+//
+//		SLOG(L"Terminal : [%s] connect [%S]:[%d] ready", m_name.c_str(), m_ip, m_port);
+//		while (_shutdown == false)
+//		{
+//			Package* package = m_session.OnRecv(0);
+//
+//			if (package == nullptr)
+//			{
+//				SLOG(L"Terminal : [%s] disconnected !!!", m_name.c_str());
+//				m_session.OnClose();
+//				goto CONNECT_START;
+//			}
+//
+//			m_server->PutPackage(package);
+//		}
+//	}
 }
 
 void Terminal::Run()

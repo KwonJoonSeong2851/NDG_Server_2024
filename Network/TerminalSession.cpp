@@ -34,20 +34,20 @@ void TerminalSession::OnSend(size_t transferSize)
 
 void TerminalSession::SendPacket(Packet* packet)
 {
-	Stream stream;
-	packet->Serialize(stream);
+	//Stream stream;
+	//packet->Serialize(stream);
 
-	packet_size_t offset = 0;
-	array<char, SOCKET_BUF_SIZE> buffer;
-	packet_size_t packetLen[1] = { sizeof(packet_size_t) + (packet_size_t)stream.GetSize(), };
+	//packet_size_t offset = 0;
+	//array<char, SOCKET_BUF_SIZE> buffer;
+	//packet_size_t packetLen[1] = { sizeof(packet_size_t) + (packet_size_t)stream.GetSize(), };
 
-	memcpy_s(buffer.data() + offset, buffer.max_size(), (void*)packetLen, sizeof(packetLen));
-	offset += sizeof(packetLen);
+	//memcpy_s(buffer.data() + offset, buffer.max_size(), (void*)packetLen, sizeof(packetLen));
+	//offset += sizeof(packetLen);
 
-	memcpy_s(buffer.data() + offset, buffer.max_size(), stream.GetData(), packetLen[0]);
-	offset += (packet_size_t)stream.GetSize();
+	//memcpy_s(buffer.data() + offset, buffer.max_size(), stream.GetData(), packetLen[0]);
+	//offset += (packet_size_t)stream.GetSize();
 
-	::send(m_socketData.socket_, buffer.data(), offset, 0);
+	//::send(m_socketData.socket_, buffer.data(), offset, 0);
 }
 
 Package* TerminalSession::OnRecv(size_t transferSize)

@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "Protocol.h"
 
 void Protocol::SerializePacket(StreamBuffer& stream, Packet* packet)

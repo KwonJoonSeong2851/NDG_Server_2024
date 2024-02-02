@@ -1,8 +1,7 @@
 #pragma once
-#include <unordered_map>
-#include "Object.h"
-
-using namespace std;
+#include "../../stdafx.h"
+class Packet;
+class Object;
 
 enum class OperationCode : unsigned char
 {
@@ -51,7 +50,7 @@ public:
 		return (*Parameters)[paramCode];
 	}
 
-	PacketType Type()
+	PacketType Type() override
 	{
 		return E_OperationRequest;
 	}
@@ -71,7 +70,7 @@ public:
 		return (*Parameters)[paramCode];
 	}
 
-	PacketType Type()
+	PacketType Type() override
 	{
 		return E_OperationResponse;
 	}

@@ -1,7 +1,5 @@
 #pragma once
 #include "../stdafx.h"
-#include "SessionManager.h"
-#include "Protocol18.h"
 
 typedef enum SERVER_STATUS
 {
@@ -11,8 +9,7 @@ typedef enum SERVER_STATUS
 };
 
 
-class Package;
-class ContentsProcess;
+
 
 /// <summary>
 ///  Server의 인터페이스를 제공하고 Config 파일의 설정을 로딩해서 서버의 초기 설정을하는 추상클래스입니다.
@@ -28,7 +25,7 @@ protected:
 
 	ContentsProcess* m_contentsProcess;
 
-	Protocol* protocol = new Protocol18;
+//	Protocol* protocol;
 
 public:
 	/// <summary> contetsProcess를 받아 서버의 역할을 규정하고 Initialize함수를 호출합니다. </summary>
@@ -46,5 +43,5 @@ public:
 	/// <summary>패킷을 받았을때 처리를 합니다.</summary>
 	void PutPackage(Package* package);
 
-	Protocol* GetProtocol();
+	//Protocol* GetProtocol();
 };

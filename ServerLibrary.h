@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+//#include "stdafx.h"
 
 #pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib,"mswsock.lib")
@@ -59,7 +59,6 @@ typedef void(*Funcation)(void*);
 
 
 
-//유틸
 #include "./Util/Util.h"
 #include "./Util/Type.h"
 #include "./Util/Singleton.h"
@@ -71,15 +70,47 @@ typedef void(*Funcation)(void*);
 #include "./Util/Task.h"
 #include "./Util/ThreadJobQueue.h"
 
+#include "./Network/StreamBuffer.h"
+#include "./Network/Packet/PacketHeader.h"
+#include "./Network/Packet/PacketClass.h"
+#include "./Network/Packet/PacketAnalyer.h"
+
+#include "./Network/Packet/Object.h"
+#include "./Network/Packet/GpType.h"
+#include "./Network/Packet/generic_.h"
+#include "./Network/Packet/wstring_.h"
+#include "./Network/Packet/vector_.h"
+#include "./Network/Packet/Dictionary.h"
+#include "./Network/Packet/Hashtable.h"
+#include "./Network/Packet/Operation.h"
+
+#include "./Network/Protocol.h"
+#include "./Network/Packet/Protocol18.h"
+
+
+
+//#include "./Network/Packet/PacketFactory.h" //delete
+
+#include "./Network/Packet/Package.h"
+
+#include "Network/Packet/ContentsProcess.h"
+
+
+
+
+
+
+
 
 
 //네트워크
+#include "./Network/Session.h"
+#include "./Network/SessionManager.h"
+
 #include "./Network/Server.h"
 #include "./Network/ServerIOCP.h"
-#include "./Network/Session.h"
 
 #include "./Network/IOCPSession.h"
-#include "./Network/SessionManager.h"
 #include "./Network/HeartBeat.h"
 
 #include "./Network/TerminalSession.h"
@@ -87,23 +118,11 @@ typedef void(*Funcation)(void*);
 #include "./Network/TerminalManager.h"
 
 
+
 //패킷 처리
-#include "Network/Packet/StreamBuffer.h"
 
-#include "./Network/Packet/Stream.h" //delete
-
-#include "./Network/Packet/PacketHeader.h"
-#include "./Network/Packet/PacketClass.h"
-#include "./Network/Packet/PacketAnalyer.h"
-
-#include "./Network/Packet/PacketFactory.h" //delete
-
-#include "./Network/Packet/Package.h"
-#include "./Network/Protocol.h"
-#include "./Network/Packet/GpType.h"
 
 //패킷 종류
-#include "Network/Packet/Operation.h"
 
 
 //#include "./Network/Packet/Protocol.h"
@@ -112,12 +131,12 @@ typedef void(*Funcation)(void*);
 
 //데이터 베이스
 
-#include "Database/ADODatabase.h"
-#include "Database/Query.h"
-#include "Database/DBManager.h"
-
-
-
+//#include "Database/ADODatabase.h"
+//#include "Database/Query.h"
+//#include "Database/DBManager.h"
+//
+//
+//
 
 #include "Network/Shutdown.h"
 

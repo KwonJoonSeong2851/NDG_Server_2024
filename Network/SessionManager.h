@@ -3,13 +3,13 @@
 #include "Session.h"
 
 
-
 //최대 Sessoin 수
 #define SESSION_CAPACITY (5000)
 
 /// <summary>
 ///  전체 Session들을 관리하는 클래스입니다.
 /// </summary>
+
 class SessionManager : public Singleton<SessionManager>
 {
 	typedef std::list<Session*> SessionList;

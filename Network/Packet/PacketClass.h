@@ -1,7 +1,5 @@
 #pragma once
 #include "../../stdafx.h"
-#include "PacketHeader.h"
-#include "Stream.h"
 
 
 /// <summary>

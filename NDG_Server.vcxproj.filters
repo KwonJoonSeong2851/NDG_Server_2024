@@ -13,12 +13,6 @@
     <Filter Include="Network\Packet">
       <UniqueIdentifier>{66160926-aa6f-4405-a80d-9d02dc831761}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Database">
-      <UniqueIdentifier>{b0748e4d-eb65-415b-bee9-b2e1caf1fc2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Query">
-      <UniqueIdentifier>{6e69c5e3-0dc5-44c4-a2bb-afe107078ec0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PCH">
       <UniqueIdentifier>{f8269acc-b5a1-4997-ae18-36de2e7ff1fa}</UniqueIdentifier>
     </Filter>
@@ -79,9 +73,6 @@
     <ClInclude Include="Network\TerminalManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Packet\Stream.h">
-      <Filter>Network\Packet</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\PacketHeader.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
@@ -112,39 +103,6 @@
     <ClInclude Include="Util\Config.h">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="Database\ADODatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Database.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DBManager.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\QueryRecord.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\QueryStatement.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query\QI_DB_REQ_ID_PW.h">
-      <Filter>Database\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query\QI_DB_REQ_SIGNIN.h">
-      <Filter>Database\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query\QI_DB_REQ_USERINFO.h">
-      <Filter>Database\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query\QI_DB_REQ_GAMERESULT.h">
-      <Filter>Database\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Query\QI_DB_REQ_TUTORIAL.h">
-      <Filter>Database\Query</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\MainProcess.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
@@ -162,9 +120,6 @@
     </ClInclude>
     <ClInclude Include="Network\Packet\Protocol18.h">
       <Filter>Network\Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\StreamBuffer.h">
-      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\Hashtable.h">
       <Filter>Network\Packet\CustomType</Filter>
@@ -184,8 +139,11 @@
     <ClInclude Include="Network\Packet\vector_.h">
       <Filter>Network\Packet\CustomType</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Protocol.h">
+    <ClInclude Include="Network\Packet\StreamBuffer.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Protocol.h">
+      <Filter>Network\Packet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +186,6 @@
     <ClCompile Include="Network\TerminalManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="Network\Packet\Stream.cpp">
-      <Filter>Network\Packet</Filter>
-    </ClCompile>
     <ClCompile Include="Network\Packet\ContentsProcess.cpp">
       <Filter>Network\Packet</Filter>
     </ClCompile>
@@ -249,21 +204,6 @@
     <ClCompile Include="Util\Config.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="Database\ADODatabase.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="Database\DBManager.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="Database\Query.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="Database\QueryRecord.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="Database\QueryStatement.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
     <ClCompile Include="NDG_Server_Main.cpp" />
     <ClCompile Include="Network\Packet\MainProcess.cpp">
       <Filter>Network\Packet</Filter>
@@ -271,17 +211,17 @@
     <ClCompile Include="Network\HeartBeat.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>PCH</Filter>
-    </ClCompile>
     <ClCompile Include="Network\Packet\Protocol18.cpp">
       <Filter>Network\Packet</Filter>
     </ClCompile>
-    <ClCompile Include="Network\Packet\StreamBuffer.cpp">
+    <ClCompile Include="Network\StreamBuffer.cpp">
       <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="Network\Protocol.cpp">
-      <Filter>Network</Filter>
+      <Filter>Network\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Packet\PacketAnalyer.cpp">
+      <Filter>Network\Packet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

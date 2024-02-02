@@ -11,8 +11,6 @@ Singleton Å¬·¡½º
 //-------------------------------------------------//
 
 
-
-
 template <class T>
 class Singleton
 {
@@ -22,8 +20,8 @@ protected:
 
 
 public:
-	Singleton(const Singleton&);
-	Singleton& operator = (const Singleton&);
+	Singleton(const Singleton&) {};
+	Singleton& operator = (const Singleton&) {};
 
 	static T& GetInstance()
 	{

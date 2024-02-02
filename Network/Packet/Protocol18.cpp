@@ -1,5 +1,5 @@
-#include "Protocol18.h"
 #include "../../stdafx.h"
+#include "Protocol18.h"
 
 
 const type_info* Protocol18::GetTypeOfCode(GpType gpType)

@@ -105,6 +105,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <UseStandardPreprocessor>false</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,17 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Database\ADODatabase.h" />
-    <ClInclude Include="Database\Database.h" />
-    <ClInclude Include="Database\DBManager.h" />
-    <ClInclude Include="Database\Query.h" />
-    <ClInclude Include="Database\QueryRecord.h" />
-    <ClInclude Include="Database\QueryStatement.h" />
-    <ClInclude Include="Database\Query\QI_DB_REQ_GAMERESULT.h" />
-    <ClInclude Include="Database\Query\QI_DB_REQ_ID_PW.h" />
-    <ClInclude Include="Database\Query\QI_DB_REQ_SIGNIN.h" />
-    <ClInclude Include="Database\Query\QI_DB_REQ_TUTORIAL.h" />
-    <ClInclude Include="Database\Query\QI_DB_REQ_USERINFO.h" />
     <ClInclude Include="Network\HeartBeat.h" />
     <ClInclude Include="Network\IOCPSession.h" />
     <ClInclude Include="Network\Packet\ContentsProcess.h" />
@@ -180,7 +170,6 @@
     <ClInclude Include="Network\Packet\PacketFactory.h" />
     <ClInclude Include="Network\Packet\PacketHeader.h" />
     <ClInclude Include="Network\Packet\Protocol18.h" />
-    <ClInclude Include="Network\Packet\Stream.h" />
     <ClInclude Include="Network\Packet\StreamBuffer.h" />
     <ClInclude Include="Network\Packet\vector_.h" />
     <ClInclude Include="Network\Packet\wstring_.h" />
@@ -209,30 +198,22 @@
     <ClInclude Include="Util\Thread.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Database\ADODatabase.cpp" />
-    <ClCompile Include="Database\DBManager.cpp" />
-    <ClCompile Include="Database\Query.cpp" />
-    <ClCompile Include="Database\QueryRecord.cpp" />
-    <ClCompile Include="Database\QueryStatement.cpp" />
     <ClCompile Include="NDG_Server_Main.cpp" />
     <ClCompile Include="Network\HeartBeat.cpp" />
     <ClCompile Include="Network\IOCPSession.cpp" />
     <ClCompile Include="Network\Packet\ContentsProcess.cpp" />
     <ClCompile Include="Network\Packet\MainProcess.cpp" />
+    <ClCompile Include="Network\Packet\PacketAnalyer.cpp" />
     <ClCompile Include="Network\Packet\Protocol18.cpp" />
-    <ClCompile Include="Network\Packet\Stream.cpp" />
-    <ClCompile Include="Network\Packet\StreamBuffer.cpp" />
     <ClCompile Include="Network\Protocol.cpp" />
     <ClCompile Include="Network\Server.cpp" />
     <ClCompile Include="Network\ServerIOCP.cpp" />
     <ClCompile Include="Network\Session.cpp" />
     <ClCompile Include="Network\SessionManager.cpp" />
+    <ClCompile Include="Network\StreamBuffer.cpp" />
     <ClCompile Include="Network\Terminal.cpp" />
     <ClCompile Include="Network\TerminalManager.cpp" />
     <ClCompile Include="Network\TerminalSession.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Util\Clock.cpp" />
     <ClCompile Include="Util\Config.cpp" />
     <ClCompile Include="Util\Lock.cpp" />

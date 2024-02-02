@@ -1,8 +1,5 @@
-#include "../stdafx.h"
-#include "Session.h"
+
 #include "IOCPSession.h"
-#include "SessionManager.h"
-#include "Packet/PacketAnalyer.h"
 
 IoData::IoData()
 {
@@ -121,7 +118,7 @@ void IOCPSession::Initialize()
 	ZeroMemory(&m_socketData, sizeof(SOCKET_DATA));
 	m_ioData[IO_READ].SetType(IO_READ);
 	m_ioData[IO_WRITE].SetType(IO_WRITE);
-	protocol = IOCPServer::GetInstance().GetProtocol();
+	//protocol = IOCPServer::GetInstance().GetProtocol();
 }
 
 void IOCPSession::CheckErrorIO(DWORD ret)
@@ -184,7 +181,7 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 	StreamBuffer stream;
 	stream.Write(tcpPacketHead, 0, sizeof(tcpPacketHead));
 
-	this->protocol->SerializePacket(stream, packet);
+	//this->protocol->SerializePacket(stream, packet);
 
 
 
@@ -211,8 +208,10 @@ Package* IOCPSession::OnRecv(size_t transferSize)
 		return nullptr;
 	}
 
-	packet_size_t packetDataSize = m_ioData[IO_READ].GetTotalBytes() - sizeof(packet_size_t);
-	Byte* packetData = (Byte*)m_ioData[IO_READ].GetData() + offset;
+	packet_size_t packetDataSize = m_ioData[IO_READ].GetTotalBytes() - sizeof(tcpPacketHead);
+	Byte* packetData = (Byte*)m_ioData[IO_READ].GetData() + sizeof(tcpPacketHead);
+
+	//handling packet head 
 
 	Packet* packet = PacketAnalyzer::GetInstance().Analyzer((const char*)packetData, packetDataSize);
 

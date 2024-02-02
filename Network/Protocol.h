@@ -1,8 +1,9 @@
 #pragma once
 #include "../stdafx.h"
-#include "Packet/PacketClass.h"
 
 
+
+class StreamBuffer;
 /// <summary>
 /// Protocol Interface class
 /// </summary>
@@ -11,6 +12,8 @@ class Protocol
 	
 
 public:
+	Protocol() {};
+	virtual ~Protocol() {};
 	virtual void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) = 0;
 	virtual void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) = 0;
 

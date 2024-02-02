@@ -2,7 +2,7 @@
 #include "../../stdafx.h"
 
 class Session;
-
+class Packet;
 
 class Package
 {

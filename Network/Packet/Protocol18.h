@@ -1,24 +1,24 @@
 #pragma once
 #include "../../stdafx.h"
-#include "../Protocol.h"
+//#include "../Protocol.h"
+//
+//#include "Object.h"
+//#include "StreamBuffer.h"
+//#include "Operation.h"
+//#include "GpType.h"
+//#include "Dictionary.h"
+//#include "Hashtable.h"
+//#include "generic_.h"
+//#include "wstring_.h"
+//#include "vector_.h"
 
-#include "Object.h"
-#include "StreamBuffer.h"
-#include "Operation.h"
-#include "GpType.h"
-#include "Dictionary.h"
-#include "Hashtable.h"
-#include "generic_.h"
-#include "wstring_.h"
-#include "vector_.h"
 
 
-
-using namespace std;
 
 //typedef unsigned char byte;
-class StreamBuffer;
-
+//class StreamBuffer;
+//class StreamBuffer;
+//class Protocol;
 class Protocol18 : public Protocol
 {
 private:
@@ -127,16 +127,19 @@ private:
 
 	const type_info* GetAllowedDictionaryKeyType(GpType gpType);
 public:
+	Protocol18() {};
+	virtual ~Protocol18() {};
+
 	const type_info* GetTypeOfCode(GpType gpType);
 	//GpType GetArrayType(Object* object);
 	GpType GetCodeOfType(const Object* object);
 	void Serialize(StreamBuffer& stream,const Object* object, bool setType);
 
-	void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) override;
-	void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) override;
+	virtual void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) ;
+	virtual void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) ;
 
-	OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) override;
-	OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) override;
+	virtual OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) ;
+	virtual OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) ;
 	Object* Deserialize(StreamBuffer& stream, byte type);
 
 };

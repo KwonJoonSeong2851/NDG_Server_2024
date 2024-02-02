@@ -5,8 +5,7 @@ class Session;
 class SessionManager;
 class Package;
 class Packet;
-class StreamBuffer;
-class Protocol;
+
 
 typedef enum
 {
@@ -85,7 +84,7 @@ class IOCPSession : public Session
 {
 
 private:
-	Protocol* protocol;
+	//Protocol* protocol;
 
 public:
 	std::array<IoData, IO_DATA_MAX> m_ioData;

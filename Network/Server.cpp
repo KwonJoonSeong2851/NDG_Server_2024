@@ -14,6 +14,9 @@ Server::Server(ContentsProcess* contentsProcess)
 		return;
 	}
 
+	//protocol = new Protocol18;
+
+
 	this->Initialize(&config);
 }
 
@@ -59,6 +62,7 @@ void Server::Initialize(xml_t* config)
 	root = config->FirstChildElement("App");
 	element = root->FirstChildElement("Name");
 
+
 	SLOG(L"Server : Server Start!!!")
 }
 
@@ -72,7 +76,7 @@ void Server::PutPackage(Package* package)
 	m_contentsProcess->PutPackage(package);
 }
 
-Protocol* Server::GetProtocol()
-{
-	return this->protocol;
-}
+//Protocol* Server::GetProtocol()
+//{
+//	return this->protocol;
+//}

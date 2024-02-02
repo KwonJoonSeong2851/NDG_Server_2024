@@ -1,9 +1,7 @@
 #pragma once
-#include <string>
-#include <iostream>
+#include "../../stdafx.h"
 #include <type_traits>
 
-using namespace std;
 
 class Object
 {
