@@ -1,12 +1,25 @@
 #include "../../stdafx.h"
 #include "PacketAnalyer.h"
+PacketAnalyzer::PacketAnalyzer()
+{
+	protocol = new Protocol18();
+}
+
+PacketAnalyzer::~PacketAnalyzer()
+{
+}
 
 Packet* PacketAnalyzer::Analyzer(const char* rowPacket, size_t size)
 {
-	StreamBuffer* stream = new StreamBuffer((byte*)rowPacket, size);
+	StreamBuffer stream((byte*)rowPacket, size);
 
 
-	//Packet* packet = IOCPServer::GetInstance().GetProtocol()->DeserializePacket(stream);
+	Packet* packet = protocol->DeserializePacket(stream);
 
-	return nullptr;
+	return packet;
+}
+
+Protocol* PacketAnalyzer::GetProtocol()
+{
+	return protocol;
 }

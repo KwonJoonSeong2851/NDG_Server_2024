@@ -73,7 +73,6 @@ typedef void(*Funcation)(void*);
 #include "./Network/StreamBuffer.h"
 #include "./Network/Packet/PacketHeader.h"
 #include "./Network/Packet/PacketClass.h"
-#include "./Network/Packet/PacketAnalyer.h"
 
 #include "./Network/Packet/Object.h"
 #include "./Network/Packet/GpType.h"
@@ -86,10 +85,7 @@ typedef void(*Funcation)(void*);
 
 #include "./Network/Protocol.h"
 #include "./Network/Packet/Protocol18.h"
-
-
-
-//#include "./Network/Packet/PacketFactory.h" //delete
+#include "./Network/Packet/PacketAnalyer.h"
 
 #include "./Network/Packet/Package.h"
 

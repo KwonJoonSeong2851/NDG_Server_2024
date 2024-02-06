@@ -180,7 +180,7 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 {
 	StreamBuffer stream;
 	stream.Write(tcpPacketHead, 0, sizeof(tcpPacketHead));
-
+	PacketAnalyzer::GetInstance().GetProtocol()->SerializePacket(stream, packet);
 	//this->protocol->SerializePacket(stream, packet);
 
 

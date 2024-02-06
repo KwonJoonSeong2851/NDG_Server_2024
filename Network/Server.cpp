@@ -14,7 +14,7 @@ Server::Server(ContentsProcess* contentsProcess)
 		return;
 	}
 
-	//protocol = new Protocol18;
+	protocol = new Protocol18();
 
 
 	this->Initialize(&config);

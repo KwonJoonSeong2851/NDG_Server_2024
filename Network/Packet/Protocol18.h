@@ -135,11 +135,11 @@ public:
 	GpType GetCodeOfType(const Object* object);
 	void Serialize(StreamBuffer& stream,const Object* object, bool setType);
 
-	virtual void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) ;
-	virtual void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) ;
+	virtual void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) override;
+	virtual void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) override;
 
-	virtual OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) ;
-	virtual OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) ;
+	virtual OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) override;
+	virtual OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) override;
 	Object* Deserialize(StreamBuffer& stream, byte type);
 
 };
