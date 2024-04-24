@@ -29,16 +29,22 @@ bool IoData::NeedMoreIo(size_t transferSize)
 
 int32_t IoData::SetupTotalBytes()
 {
-	packet_size_t offset = 0;
-	packet_size_t packetLen[1] = { 0, };
+	packet_size_t offset = 1;
+	packet_size_t packetLen = 0;
 
 	if (m_totalBytes == 0)
 	{
-		memcpy_s((void*)packetLen, sizeof(packetLen), (void*)(m_buffer.data() + 1), sizeof(packetLen));
-		m_totalBytes = (size_t)packetLen[0];
+		char* buffer = m_buffer.data();
+		int num1 = (int)buffer[offset++] << 24;
+		int num2 = (int)buffer[offset++] << 16;
+		int num3 = (int)buffer[offset++] << 8;
+		packetLen = num1 | num2 | num3 | (int)buffer[offset++];
+		//return  num1 | num2 | num3 | (int)bufferAndAdvance[offset + 3];
+		//memcpy_s((void*)packetLen, sizeof(packetLen), (void*)(m_buffer.data()), sizeof(packetLen));
+		//m_totalBytes = ntohl((size_t)packetLen[0]);
+		m_totalBytes = packetLen;
 	}
-	offset += sizeof(packetLen);
-
+	
 	return offset;
 }
 
@@ -72,13 +78,19 @@ bool IoData::SetData(StreamBuffer& stream)
 		return false;
 	}
 
-	packet_size_t offset = 1;
 	char* buf = m_buffer.data();
-
-
 	memcpy_s(buf, m_buffer.max_size(), (void*)stream.GetBuffer(), stream.Length());
 
-	memcpy_s(buf + 1, sizeof(packet_size_t), (void*)stream.Length(), sizeof(packet_size_t));
+	packet_size_t size = stream.Length();
+	packet_size_t offset = 1;
+	
+	buf[offset++] = (unsigned char)(size >> 24);
+	buf[offset++] = (unsigned char)(size >> 16);
+	buf[offset++] = (unsigned char)(size >> 8);
+	buf[offset++] = (unsigned char)(size);
+
+	
+
 	m_totalBytes = stream.Length();
 	return true;
 }
@@ -118,14 +130,15 @@ void IOCPSession::Initialize()
 	ZeroMemory(&m_socketData, sizeof(SOCKET_DATA));
 	m_ioData[IO_READ].SetType(IO_READ);
 	m_ioData[IO_WRITE].SetType(IO_WRITE);
-	//protocol = IOCPServer::GetInstance().GetProtocol();
+	
+	m_protocol = new Protocol18();
 }
 
 void IOCPSession::CheckErrorIO(DWORD ret)
 {
 	if (ret == SOCKET_ERROR && (WSAGetLastError() != ERROR_IO_PENDING))
 	{
-		SLOG(L"IOCPSession : socket error: %d", WSAGetLastError());
+		SLOG(L"IOCPSession : socket error1: %d", WSAGetLastError());
 	}
 }
 
@@ -133,7 +146,7 @@ void IOCPSession::Recv(WSABUF wsaBuf)
 {
 	DWORD flags = 0;
 	DWORD recvBytes;
-	DWORD errorCode = WSARecv(m_socketData.socket_, &wsaBuf, 1, &recvBytes, &flags, m_ioData[IO_READ].GetOverlapped(), NULL);
+	DWORD errorCode = WSARecv(m_socketData.socket_, &wsaBuf, 1, &recvBytes, &flags, m_ioData[IO_READ].GetOverlapped(),NULL);
 
 	this->CheckErrorIO(errorCode);
 }
@@ -168,6 +181,29 @@ void IOCPSession::Send(WSABUF wsaBuf)
 
 }
 
+void IOCPSession::ReadPing(char* buf)
+{
+	int offset = 1;
+	m_sessionLocalTime = buf[offset++] >> 24 | buf[offset++] >> 16 | buf[offset++] >> 8 | buf[offset++];
+	SLOG(L"Recv Ping : session time = %d", m_sessionLocalTime);
+	UpdateHeartBeat();
+	SendPing();
+}
+
+void IOCPSession::SendPing()
+{
+	int offset = 1;
+	m_protocol->Serialize(NOW_MILLISEC_INT32, m_pingResponsePacket, offset);
+	m_protocol->Serialize(m_sessionLocalTime, m_pingResponsePacket, offset);
+
+	WSABUF wsaBuf;
+	wsaBuf.buf = (char*)m_pingResponsePacket;
+	wsaBuf.len = 9;
+	this->Send(wsaBuf);
+	this->RecvStandBy();
+
+}
+
 void IOCPSession::OnSend(size_t transferSize)
 {
 	if (m_ioData[IO_WRITE].NeedMoreIo(transferSize))
@@ -180,9 +216,7 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 {
 	StreamBuffer stream;
 	stream.Write(tcpPacketHead, 0, sizeof(tcpPacketHead));
-	PacketAnalyzer::GetInstance().GetProtocol()->SerializePacket(stream, packet);
-	//this->protocol->SerializePacket(stream, packet);
-
+	GetProtocol()->SerializePacket(stream, packet);
 
 
 	if (!m_ioData[IO_WRITE].SetData(stream))
@@ -200,20 +234,25 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 
 Package* IOCPSession::OnRecv(size_t transferSize)
 {
-	packet_size_t offset = 0;
-	offset += m_ioData[IO_READ].SetupTotalBytes();
+	m_ioData[IO_READ].SetupTotalBytes();
 
 	if (this->IsRecving(transferSize))
 	{
 		return nullptr;
 	}
 
-	packet_size_t packetDataSize = m_ioData[IO_READ].GetTotalBytes() - sizeof(tcpPacketHead);
-	Byte* packetData = (Byte*)m_ioData[IO_READ].GetData() + sizeof(tcpPacketHead);
+	//handling ping
+	if (m_ioData[IO_READ].GetData()[0] == 240)
+	{
+		ReadPing(m_ioData[IO_READ].GetData());
+		this->RecvStandBy();
+		return nullptr;
+	}
+
 
 	//handling packet head 
 
-	Packet* packet = PacketAnalyzer::GetInstance().Analyzer((const char*)packetData, packetDataSize);
+	Packet* packet = PacketAnalyzer::GetInstance().Analyzer(m_ioData[IO_READ].GetData(), m_ioData[IO_READ].GetTotalBytes());
 
 	if (packet == nullptr)
 	{

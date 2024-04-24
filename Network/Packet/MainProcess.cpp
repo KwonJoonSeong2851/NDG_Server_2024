@@ -7,15 +7,36 @@ MainProcess::MainProcess()
 
 void MainProcess::RegistSubPacketFunc()
 {
-#define INSERT_PACKET_PROCESS(type) m_runFuncTable.insert(make_pair(E_##type, &MainProcess::##type))
+#define INSERT_PACKET_PROCESS(type) m_runFuncTable.insert(make_pair(E_##type, &MainProcess::##type##Process))
 
-	INSERT_PACKET_PROCESS(C_REQ_ID_PW);
+	INSERT_PACKET_PROCESS(InitRequest);
+	//INSERT_PACKET_PROCESS(C_REQ_ID_PW);
+	//INSERT_PACKET_PROCESS(C_OperationRequest);
 	//INSERT_PACKET_PROCESS(C_REQ_SIGNIN);
 	//INSERT_PACKET_PROCESS(C_REQ_USERINFO);
 	//INSERT_PACKET_PROCESS(C_REQ_GAMERESULT);
 	//INSERT_PACKET_PROCESS(C_REQ_CHATTING);
 	//INSERT_PACKET_PROCESS(C_REQ_GET_TUTORIAL);
 	//INSERT_PACKET_PROCESS(C_REQ_SET_TUTORIAL);
+}
+
+void MainProcess::InitRequestProcess(Session* session, Packet* rowPacket)
+{
+	PK_InitRequest* pk = (PK_InitRequest*)rowPacket;
+
+	byte* numArray = pk->data;
+
+	if (numArray[0] == (unsigned char)251)
+	{
+		Peer* peer = new C_UnityPeer(session);
+		session->SetPeer(peer);
+	}
+
+	PK_InitResponse* sendPacket = new PK_InitResponse();
+	session->SendPacket(sendPacket);
+	
+	SAFE_DELETE(sendPacket);
+	return;
 }
 
 //
@@ -33,6 +54,10 @@ void MainProcess::C_REQ_ID_PW(Session* session, Packet* rowPacket)
 	statement->AddParam((char*)packet->password.c_str());
 	statement->EndParam();
 	DBManager::GetInstance().PushQuery(query);*/
+
+}
+void MainProcess::C_OperationRequest(Session* seesion, Packet* rowPacket)
+{
 
 }
 //

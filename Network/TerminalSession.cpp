@@ -77,3 +77,11 @@ Package* TerminalSession::OnRecv(size_t transferSize)
 	Package* package = new Package(this, packet);
 	return package;
 }
+
+void TerminalSession::ReadPing(char* buf)
+{
+}
+
+void TerminalSession::SendPing()
+{
+}

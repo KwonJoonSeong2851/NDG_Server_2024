@@ -19,6 +19,7 @@ enum
 class Package;
 class Packet;
 class User;
+class Peer;
 
 
 /// <summary>
@@ -32,9 +33,11 @@ protected:
     oid_t            m_id;
     int8_t           m_type;
     tick_t           m_lastHeartBeat;
-
+    int              m_sessionLocalTime;
+    Protocol*        m_protocol;
+    Peer*             m_peer;
     bool             SetSocketOpt();
-    User* m_user;
+  
 
 public:
     Session();
@@ -48,6 +51,9 @@ public:
     virtual void RecvStandBy() {};
     virtual void OnClose();
 
+    virtual void ReadPing(char* buf) = 0;
+    virtual void SendPing() = 0;
+
     SOCKET& GetSocket();
     str_t GetClientAddress();
 
@@ -60,7 +66,11 @@ public:
     tick_t HeartBeat();
     void UpdateHeartBeat();
 
-    void SetUser(User* user);
-    User* GetUser();
+    Protocol* GetProtocol();
+    void SetPeer(Peer* peer);
+    Peer* GetPeer();
+
+
+
 
 };

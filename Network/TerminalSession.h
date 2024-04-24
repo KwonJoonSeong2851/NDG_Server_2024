@@ -14,4 +14,7 @@ public:
 	void OnSend(size_t transferSize);
 	void SendPacket(Packet* packet);
 	Package* OnRecv(size_t transferSize);
+
+	void ReadPing(char* buf);
+	void SendPing();
 };

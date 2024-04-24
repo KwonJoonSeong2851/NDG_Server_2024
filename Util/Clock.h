@@ -15,7 +15,7 @@
 #define CLOCK             Clock::GetInstance()
 #define NOW_TICK          Clock::GetInstance().SystemTick()
 #define NOW_STRING        Clock::GetInstance().NowTime()
-
+#define NOW_MILLISEC_INT32      Clock::GetInstance().NowMilliSecInt32()
 
 #define TICK_MIN          (60)
 #define TICK_HOUR         (TICK_MIN * 60)
@@ -63,7 +63,10 @@ typedef system_clock::time_point timePoint;
 class Clock : public Singleton<Clock>
 {
 private:
+	bool m_cachRunning = false;
 	tick_t m_serverStartTick;
+
+	int m_nowMilliSecInt32;
 
 	wstr_t TickToStr(tick_t tick, const WCHAR *fmt = (WCHAR*)DATETIME_FORMAT);
 
@@ -78,11 +81,15 @@ public:
 	wstr_t NowTime(const WCHAR* fmt = (WCHAR*)DATETIME_FORMAT);
 	wstr_t NowTimeWithMilliSec(const WCHAR* fmt = (WCHAR*)DATETIME_FORMAT);
 
+	int NowMilliSecInt32();
+
 	wstr_t Today();
 	wstr_t tomorrow();
 	wstr_t Yesterday();
 
 	DayOfTheWeek TodayOfTheWeek();
+
+	void TimeCaching();
 
 
 	

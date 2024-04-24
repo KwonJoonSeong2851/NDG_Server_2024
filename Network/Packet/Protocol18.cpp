@@ -753,7 +753,7 @@ int Protocol18::ReadInt32(StreamBuffer& stream)
 	int num1 = (int)bufferAndAdvance[offset] << 24;
 	int num2 = (int)bufferAndAdvance[offset + 1] << 16;
 	int num3 = (int)bufferAndAdvance[offset + 2] << 8;
-	return  num1 | num2 | num3 | (int)bufferAndAdvance[offset + 3];;
+	return  num1 | num2 | num3 | (int)bufferAndAdvance[offset + 3];
 }
 
 float Protocol18::ReadSingle(StreamBuffer& stream)

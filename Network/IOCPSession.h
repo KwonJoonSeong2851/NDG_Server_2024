@@ -14,7 +14,9 @@ typedef enum
 	IO_ERROR,
 } IO_OPERATION;
 
-static byte tcpPacketHead[9]
+
+
+static const byte tcpPacketHead[9]
 {
 	(byte)251,
 	(byte)0, //s
@@ -26,6 +28,15 @@ static byte tcpPacketHead[9]
 	(byte)243,
 	(byte)2, // EgMessageType
 };
+
+//static const byte* pingResponse = new byte[5]
+//{
+//	240,
+//	0,
+//	0,
+//	0,
+//	0,
+//};
 
 #define IO_DATA_MAX (2)
 
@@ -84,7 +95,8 @@ class IOCPSession : public Session
 {
 
 private:
-	//Protocol* protocol;
+	unsigned char* m_pingResponsePacket = new byte[9]{ 240,0,0,0,0,0,0,0 };
+
 
 public:
 	std::array<IoData, IO_DATA_MAX> m_ioData;
@@ -98,8 +110,10 @@ private:
 
 	void Recv(WSABUF wsaBuf);
 	bool IsRecving(size_t transferSize);
-
 	void Send(WSABUF wsaBuf);
+
+	void ReadPing(char* buf);
+	void SendPing();
 
 public:
 	IOCPSession();

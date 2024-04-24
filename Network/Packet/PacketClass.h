@@ -15,6 +15,27 @@ public:
 };
 
 
+class PK_InitRequest : public Packet
+{
+private:
+
+public:
+	PK_InitRequest(){}
+	~PK_InitRequest() {}
+	PacketType Type() {return E_InitRequest; }
+
+	int size = 0;
+	byte* data = nullptr;
+
+};
+
+class PK_InitResponse : public Packet
+{
+public:
+	PacketType Type() { return E_InitResponse; }
+
+};
+
 
 
 

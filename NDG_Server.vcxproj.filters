@@ -145,6 +145,15 @@
     <ClInclude Include="Network\Protocol.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
+    <ClInclude Include="Network\Peer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Enum.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\C_UnityPeer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util\Lock.cpp">
@@ -222,6 +231,12 @@
     </ClCompile>
     <ClCompile Include="Network\Packet\PacketAnalyer.cpp">
       <Filter>Network\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Peer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\C_UnityPeer.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

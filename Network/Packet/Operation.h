@@ -52,7 +52,7 @@ public:
 
 	PacketType Type() override
 	{
-		return E_OperationRequest;
+		return E_C_OperationRequest;
 	}
 };
 
@@ -72,7 +72,7 @@ public:
 
 	PacketType Type() override
 	{
-		return E_OperationResponse;
+		return E_S_OperationResponse;
 	}
 };
 

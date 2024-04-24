@@ -20,6 +20,8 @@ public:
 	virtual OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) = 0;
 	virtual OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) = 0;
 
+	void Serialize(int value, unsigned char* target, int& offset);
+	void Deserialize(int& value, unsigned char* source, int& offset);
     void SerializePacket(StreamBuffer& stream, Packet* packet);
 	Packet* DeserializePacket(StreamBuffer& stream);
 

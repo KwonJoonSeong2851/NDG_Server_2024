@@ -61,6 +61,7 @@ typedef void(*Funcation)(void*);
 
 #include "./Util/Util.h"
 #include "./Util/Type.h"
+
 #include "./Util/Singleton.h"
 #include "./Util/Config.h"
 #include "./Util/Lock.h"
@@ -70,6 +71,7 @@ typedef void(*Funcation)(void*);
 #include "./Util/Task.h"
 #include "./Util/ThreadJobQueue.h"
 
+#include "./Network/Enum.h"
 #include "./Network/StreamBuffer.h"
 #include "./Network/Packet/PacketHeader.h"
 #include "./Network/Packet/PacketClass.h"
@@ -100,6 +102,9 @@ typedef void(*Funcation)(void*);
 
 
 //네트워크
+//#include "./Network/Peer.h"
+#include "./Network/C_UnityPeer.h"
+
 #include "./Network/Session.h"
 #include "./Network/SessionManager.h"
 
@@ -112,6 +117,8 @@ typedef void(*Funcation)(void*);
 #include "./Network/TerminalSession.h"
 #include "./Network/Terminal.h"
 #include "./Network/TerminalManager.h"
+
+
 
 
 

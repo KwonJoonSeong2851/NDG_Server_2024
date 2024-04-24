@@ -154,6 +154,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Network\C_UnityPeer.h" />
+    <ClInclude Include="Network\Enum.h" />
     <ClInclude Include="Network\HeartBeat.h" />
     <ClInclude Include="Network\IOCPSession.h" />
     <ClInclude Include="Network\Packet\ContentsProcess.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Network\Packet\StreamBuffer.h" />
     <ClInclude Include="Network\Packet\vector_.h" />
     <ClInclude Include="Network\Packet\wstring_.h" />
+    <ClInclude Include="Network\Peer.h" />
     <ClInclude Include="Network\Protocol.h" />
     <ClInclude Include="Network\Server.h" />
     <ClInclude Include="Network\ServerIOCP.h" />
@@ -199,12 +202,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NDG_Server_Main.cpp" />
+    <ClCompile Include="Network\C_UnityPeer.cpp" />
     <ClCompile Include="Network\HeartBeat.cpp" />
     <ClCompile Include="Network\IOCPSession.cpp" />
     <ClCompile Include="Network\Packet\ContentsProcess.cpp" />
     <ClCompile Include="Network\Packet\MainProcess.cpp" />
     <ClCompile Include="Network\Packet\PacketAnalyer.cpp" />
     <ClCompile Include="Network\Packet\Protocol18.cpp" />
+    <ClCompile Include="Network\Peer.cpp" />
     <ClCompile Include="Network\Protocol.cpp" />
     <ClCompile Include="Network\Server.cpp" />
     <ClCompile Include="Network\ServerIOCP.cpp" />

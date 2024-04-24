@@ -3,8 +3,10 @@
 
 enum PacketType : Int64
 {
-	E_OperationRequest = 1,
-	E_OperationResponse = 2,
+	E_InitRequest = 0,
+	E_InitResponse = 1,
+	E_C_OperationRequest = 3,
+	E_S_OperationResponse = 4,
 
 	//채팅 패킷
 	E_C_REQ_CHATTING = 1000,

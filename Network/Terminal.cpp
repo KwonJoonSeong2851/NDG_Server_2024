@@ -44,6 +44,7 @@ const char* Terminal::GetIp()
 	return m_ip;
 }
 
+
 void Terminal::ConnectProcess() 
 {
 //CONNECT_START:

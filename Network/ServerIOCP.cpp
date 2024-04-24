@@ -126,7 +126,7 @@ DWORD WINAPI IOCPServer::WorkerThread(LPVOID serverPtr)
 		IoData* ioData = nullptr;
 		IOCPSession* session = nullptr;
 		DWORD transferSize;
-
+		
 		BOOL ret = GetQueuedCompletionStatus(server->GetIocp(), &transferSize, (PULONG_PTR)&session, (LPOVERLAPPED*)&ioData, INFINITE);
 		if (!ret)
 		{
@@ -152,6 +152,7 @@ DWORD WINAPI IOCPServer::WorkerThread(LPVOID serverPtr)
 
 		case IO_READ:
 		{
+			SLOG(L"IOCP SERVER :: Recieve transfer size : %d" , transferSize);
 			Package* package = session->OnRecv((size_t)transferSize);
 			if (package != nullptr)
 			{

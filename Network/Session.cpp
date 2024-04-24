@@ -51,6 +51,7 @@ void Session::OnClose()
 	SessionManager::GetInstance().CloseSession(this);
 }
 
+
 SOCKET& Session::GetSocket()
 {
 	return m_socketData.socket_;
@@ -93,12 +94,18 @@ void Session::UpdateHeartBeat()
 	m_lastHeartBeat = CLOCK.SystemTick();
 }
 
-void Session::SetUser(User* user)
+Protocol* Session::GetProtocol()
 {
-	m_user = user;
+	return m_protocol;
 }
 
-User* Session::GetUser()
+void Session::SetPeer(Peer* peer)
 {
-	return m_user;
+	m_peer = peer;
 }
+
+Peer* Session::GetPeer()
+{
+	return m_peer;
+}
+

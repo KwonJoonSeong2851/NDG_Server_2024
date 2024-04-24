@@ -43,5 +43,5 @@ public:
 	/// <summary>패킷을 받았을때 처리를 합니다.</summary>
 	void PutPackage(Package* package);
 
-	Protocol* GetProtocol();
+	//Protocol* GetProtocol();
 };

@@ -38,6 +38,7 @@ public:
 	void SendPacket(Packet* packet);
 	const char* GetIp();
 
+
 private:
 	void ConnectProcess();
 	void Run();
