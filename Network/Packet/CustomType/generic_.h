@@ -30,6 +30,11 @@ public:
 		return std::hash<T>()(data);
 	}
 
+	Object* Copy() override
+	{
+		return new generic_<T>(data);
+	}
+
 	T& operator*()
 	{
 		return data;

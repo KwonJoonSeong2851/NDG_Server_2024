@@ -106,6 +106,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <UseStandardPreprocessor>false</UseStandardPreprocessor>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,27 +155,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Lobby.h" />
+    <ClInclude Include="Game\LobbyManager.h" />
+    <ClInclude Include="Game\Room.h" />
     <ClInclude Include="Network\C_UnityPeer.h" />
-    <ClInclude Include="Network\Enum.h" />
+    <ClInclude Include="Network\Enums.h" />
     <ClInclude Include="Network\HeartBeat.h" />
     <ClInclude Include="Network\IOCPSession.h" />
     <ClInclude Include="Network\Packet\ContentsProcess.h" />
-    <ClInclude Include="Network\Packet\Dictionary.h" />
-    <ClInclude Include="Network\Packet\generic_.h" />
+    <ClInclude Include="Network\Packet\CustomType\Dictionary.h" />
+    <ClInclude Include="Network\Packet\CustomType\GameCustomType\Quaternion.h" />
+    <ClInclude Include="Network\Packet\CustomType\GameCustomType\Vector3.h" />
+    <ClInclude Include="Network\Packet\CustomType\generic_.h" />
+    <ClInclude Include="Network\Packet\CustomType\Hashtable.h" />
+    <ClInclude Include="Network\Packet\CustomType\Object.h" />
+    <ClInclude Include="Network\Packet\CustomType\vector_.h" />
+    <ClInclude Include="Network\Packet\CustomType\wstring_.h" />
     <ClInclude Include="Network\Packet\GpType.h" />
-    <ClInclude Include="Network\Packet\Hashtable.h" />
     <ClInclude Include="Network\Packet\MainProcess.h" />
-    <ClInclude Include="Network\Packet\Object.h" />
     <ClInclude Include="Network\Packet\Operation.h" />
     <ClInclude Include="Network\Packet\Package.h" />
     <ClInclude Include="Network\Packet\PacketAnalyer.h" />
     <ClInclude Include="Network\Packet\PacketClass.h" />
-    <ClInclude Include="Network\Packet\PacketFactory.h" />
     <ClInclude Include="Network\Packet\PacketHeader.h" />
     <ClInclude Include="Network\Packet\Protocol18.h" />
     <ClInclude Include="Network\Packet\StreamBuffer.h" />
-    <ClInclude Include="Network\Packet\vector_.h" />
-    <ClInclude Include="Network\Packet\wstring_.h" />
     <ClInclude Include="Network\Peer.h" />
     <ClInclude Include="Network\Protocol.h" />
     <ClInclude Include="Network\Server.h" />
@@ -201,6 +206,9 @@
     <ClInclude Include="Util\Thread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Lobby.cpp" />
+    <ClCompile Include="Game\LobbyManager.cpp" />
+    <ClCompile Include="Game\Room.cpp" />
     <ClCompile Include="NDG_Server_Main.cpp" />
     <ClCompile Include="Network\C_UnityPeer.cpp" />
     <ClCompile Include="Network\HeartBeat.cpp" />

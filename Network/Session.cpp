@@ -48,6 +48,7 @@ bool Session::OnAccept(SOCKET socket, SOCKADDR_IN addrInfo)
 
 void Session::OnClose()
 {
+	//delete m_peer;
 	SessionManager::GetInstance().CloseSession(this);
 }
 

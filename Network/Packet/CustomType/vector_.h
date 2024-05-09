@@ -34,10 +34,10 @@ public:
 
 	vector_(int size)
 	{
-		if (size <= 0)
-		{
-			size = 1;
-		}
+		//if (size <= 0)
+		//{
+		//	size = 1;
+		//}
 
 		this->typeInfo = &typeid(T);
 		this->isArray = true;
@@ -63,7 +63,7 @@ public:
 
 	vector_(vector<T> value)
 	{
-		data = value;
+		//data = value;
 		this->typeInfo = &typeid(T);
 		this->isArray = true;
 
@@ -106,8 +106,13 @@ public:
 
 	size_t Hash() const override
 	{
-		runtime_error("Arrays cannot be key");
+		throw runtime_error("Arrays cannot be key");
 		return 0;
+	}
+		
+	Object* Copy() override
+	{
+		return new vector_<T>(*data);
 	}
 
 	vector<T>& operator*()

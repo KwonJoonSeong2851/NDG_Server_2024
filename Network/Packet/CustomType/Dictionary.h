@@ -1,6 +1,6 @@
 #pragma once
-#include "../../stdafx.h"
-//#include "Object.h"
+//#include "../../stdafx.h"
+#include "Object.h"
 //#include "wstring_.h"
 //#include "generic_.h"
 //#include <unordered_map>
@@ -45,6 +45,26 @@ public:
 	{
 		return table.size();
 	}
+
+	size_t Hash() const override
+	{
+		runtime_error("Dictionary cannot be key");
+		return 0;
+	}
+
+	Object* Copy() override
+	{
+		Dictionary* temp = new Dictionary();
+		for (auto p : table)
+		{
+			Object* key = p.first->Copy();
+			Object* value = p.second->Copy();
+			temp->Insert(make_pair(key, value));
+		}
+
+		return temp;
+	}
+
 
 	Object* operator[](Object* key)
 	{

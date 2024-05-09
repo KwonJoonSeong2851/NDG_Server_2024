@@ -1,17 +1,18 @@
 #include "../stdafx.h"
 #include "Protocol.h"
 
-void Protocol::Serialize(int value, unsigned char* target, int& offset)
+void Protocol::Serialize(int value,  char* target, int& offset)
 {
-	target[offset++] = (unsigned char)(value >> 24);
-	target[offset++] = (unsigned char)(value >> 16);
-	target[offset++] = (unsigned char)(value >> 8);
-	target[offset++] = (unsigned char)(value);
+	target[offset++] = (char)(value >> 24);
+	target[offset++] = (char)(value >> 16);
+	target[offset++] = (char)(value >> 8);
+	target[offset++] = (char)(value);
 
 }
 
 void Protocol::Deserialize(int& value, unsigned char* source, int& offset)
 {
+	value = (int)source[offset++] << 24 | (int)source[offset++] << 16 | (int)source[offset++] << 8 | (int)source[offset++];
 }
 
 void Protocol::SerializePacket(StreamBuffer& stream, Packet* packet)
@@ -21,12 +22,19 @@ void Protocol::SerializePacket(StreamBuffer& stream, Packet* packet)
 	case E_InitResponse:
 		stream.GetBuffer()[8] = 1;
 		break;
-	case E_C_OperationRequest:
-		SerializeOperationRequest(stream, *(OperationRequest*)packet, true);
+	case E_OperationRequest:
+		stream.GetBuffer()[8] = 2;
+		SerializeOperationRequest(stream, *(PK_OperationRequest*)packet, false);
 		break;
 
-	case E_S_OperationResponse:
-		SerializeOperationResponse(stream, *(OperationResponse*)packet, true);
+	case E_OperationResponse:
+		stream.GetBuffer()[8] = 3;
+		SerializeOperationResponse(stream, *(PK_OperationResponse*)packet, false);
+		break;
+
+	case E_EventData:
+		stream.GetBuffer()[8] = 4;
+		SerializeEventData(stream, *(PK_EventData*)packet, false);
 		break;
 
 	}

@@ -29,7 +29,9 @@ StreamBuffer::StreamBuffer(byte* buf,int size)
 {
 	this->pos = 0;
 	this->len = size;
-	this->buf = buf;
+	byte* tempBuf = new byte[size];
+	memcpy_s(tempBuf, size, buf, size);
+	this->buf = tempBuf;
 }
 
 StreamBuffer::~StreamBuffer()
@@ -132,6 +134,7 @@ void StreamBuffer::Write(const byte* buffer, int srcOffset, int count)
 
 byte StreamBuffer::ReadByte()
 {
+	std::cout << "Pos " << this->pos << " len " << len << endl;
 	return this->pos < this->len ? this->buf[this->pos++] : throw std::runtime_error("StreamBuffer.ReadByte() failed.");
 }
 

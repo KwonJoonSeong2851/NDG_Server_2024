@@ -19,6 +19,15 @@
     <Filter Include="Network\Packet\CustomType">
       <UniqueIdentifier>{9329bddc-d8cd-4b60-aece-b2e3c7e7b6e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{a90c1854-2dfd-46b6-a4c5-b15225576ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Peer">
+      <UniqueIdentifier>{b0d55ccc-c976-4fe2-ad38-1683490405a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Packet\CustomType\GameCustomType">
+      <UniqueIdentifier>{46457028-f56f-47e9-b513-82f0b423532c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerLibrary.h" />
@@ -82,9 +91,6 @@
     <ClInclude Include="Network\Packet\PacketAnalyer.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Packet\PacketFactory.h">
-      <Filter>Network\Packet</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\Package.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
@@ -112,32 +118,11 @@
     <ClInclude Include="stdafx.h">
       <Filter>PCH</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Packet\Object.h">
-      <Filter>Network\Packet</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\Operation.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\Protocol18.h">
       <Filter>Network\Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\Hashtable.h">
-      <Filter>Network\Packet\CustomType</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\GpType.h">
-      <Filter>Network\Packet\CustomType</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\generic_.h">
-      <Filter>Network\Packet\CustomType</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\Dictionary.h">
-      <Filter>Network\Packet\CustomType</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\wstring_.h">
-      <Filter>Network\Packet\CustomType</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\vector_.h">
-      <Filter>Network\Packet\CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\StreamBuffer.h">
       <Filter>Network</Filter>
@@ -145,14 +130,50 @@
     <ClInclude Include="Network\Protocol.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Peer.h">
+    <ClInclude Include="Network\Enums.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Enum.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="Game\Lobby.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LobbyManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Room.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Peer.h">
+      <Filter>Network\Peer</Filter>
     </ClInclude>
     <ClInclude Include="Network\C_UnityPeer.h">
-      <Filter>Network</Filter>
+      <Filter>Network\Peer</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\GameCustomType\Vector3.h">
+      <Filter>Network\Packet\CustomType\GameCustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\GameCustomType\Quaternion.h">
+      <Filter>Network\Packet\CustomType\GameCustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\Dictionary.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\generic_.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\Hashtable.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\Object.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\vector_.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\CustomType\wstring_.h">
+      <Filter>Network\Packet\CustomType</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\GpType.h">
+      <Filter>Network\Packet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -232,11 +253,20 @@
     <ClCompile Include="Network\Packet\PacketAnalyer.cpp">
       <Filter>Network\Packet</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Lobby.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LobbyManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Room.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
     <ClCompile Include="Network\Peer.cpp">
-      <Filter>Network</Filter>
+      <Filter>Network\Peer</Filter>
     </ClCompile>
     <ClCompile Include="Network\C_UnityPeer.cpp">
-      <Filter>Network</Filter>
+      <Filter>Network\Peer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

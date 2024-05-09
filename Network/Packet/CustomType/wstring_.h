@@ -25,15 +25,6 @@ public:
 		size = data.length() * sizeof(wchar_t);
 	}
 
-	//wstring_(const wchar_t* ws)
-	//{
-	//	data = *ws;
-	//	typeInfo = &typeid(wstring_);
-	//	this->dataPointer = (void*)ws;
-	//	size = wcslen(ws);
-	//}
-
-
 	~wstring_()
 	{
 		size = 0;
@@ -44,6 +35,11 @@ public:
 	size_t Hash() const override
 	{
 		return std::hash<wstring>()(data);
+	}
+
+	Object* Copy() override
+	{
+		return new wstring_(data);
 	}
 
 	void operator=(const wstring& other)

@@ -18,6 +18,15 @@ Lock::Lock(const WCHAR* name)
 	m_lockingLine = INVALID_LINE;
 }
 
+//Lock::Lock(const wstring* name)
+//{
+//	m_lockId = LockManager::GetInstance().GeneralId();
+//	m_name = *name;
+//
+//	m_lockingFile.clear();
+//	m_lockingLine = INVALID_LINE;
+//}
+
 Lock::~Lock()
 {
 	m_name.clear();

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../stdafx.h"
+#include "../../../stdafx.h"
 #include <type_traits>
 
 
@@ -17,13 +17,26 @@ public:
     Object() 
 	{
 		dataPointer = nullptr;
+		typeInfo = &typeid(Object);
 	}
 	virtual ~Object() {}
 
-	virtual size_t Hash() const { wcout << L"ºÎ¸ð hash" << endl; return 0; }
+	virtual size_t Hash() const
+	{
+		throw runtime_error("Object Hash()");
+	}
+
+	virtual Object* Copy()
+	{
+		//null object
+		return new Object();
+	}
 
 	bool operator == (const Object& other) const
 	{
+		if (*(this->typeInfo) == typeid(Object))
+			return false;
+
 		if (this->typeInfo != other.typeInfo)
 			return false;
 

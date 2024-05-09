@@ -95,14 +95,14 @@ GpType Protocol18::GetCodeOfType(const Object* object)
 		const Object* element = object->GetElement();
 		if (element == nullptr)
 		{
-			runtime_error("The array type is unknown.");
+			throw runtime_error("The array type is unknown.");
 			return GpType::Unknown;
 		}
 		if (element->IsArray())
 			return GpType::Array;
 		if (*element->GetType() == typeid(wstring_))
 			return GpType::StringArray;
-		if (*element->GetType() == typeid(Object))
+		if (*element->GetType() == typeid(Object*))
 			return GpType::ObjectArray;
 		if (*element->GetType() == typeid(Hashtable))
 			return GpType::HashtableArray;
@@ -115,6 +115,10 @@ GpType Protocol18::GetCodeOfType(const Object* object)
 		return GpType::Hashtable;
 	if (typeCode == typeid(Dictionary))
 		return GpType::Dictionary;
+	if (typeCode == typeid(Vector3))
+		return GpType::Vector3;
+	if (typeCode == typeid(Quaternion))
+		return GpType::Quaternion;
 	//if (typeCode == typeid(EventData))
 	//	return GpType::EventData;
 	//if (typeCode == typeid(OperationRequest))
@@ -319,8 +323,8 @@ void Protocol18::WriteSingle(StreamBuffer& stream,const float& value, bool write
 	int offset;
 	byte* bufferAndAdvance = stream.GetBufferAndAdvance(4, offset);
 	//lock 필요
-	this->memFloatBlock[0] = value;
-	memcpy_s(bufferAndAdvance + offset, stream.Length(), this->memFloatBlock, sizeof(float));
+	//this->memFloatBlock[0] = value;
+	memcpy_s(bufferAndAdvance + offset, stream.Length(), &value, sizeof(float));
 }
 
 void Protocol18::WriteDouble(StreamBuffer& stream,const double& value, bool writeType)
@@ -330,8 +334,8 @@ void Protocol18::WriteDouble(StreamBuffer& stream,const double& value, bool writ
 	int offset;
 	byte* bufferAndAdvance = stream.GetBufferAndAdvance(8, offset);
 	//lock필요
-	this->memDoubleBlock[0] = value;
-	memcpy_s(bufferAndAdvance + offset, stream.Length() , this->memDoubleBlock, sizeof(double));
+	//this->memDoubleBlock[0] = value;
+	memcpy_s(bufferAndAdvance + offset, stream.Length() , &value, sizeof(double));
 }
 
 void Protocol18::WriteString(StreamBuffer& stream, const wstring& value, bool writeType)
@@ -358,12 +362,39 @@ void Protocol18::WriteString(StreamBuffer& stream, const wstring& value, bool wr
 	delete[] charBuf;
 }
 
+void Protocol18::WriteVector3(StreamBuffer& stream, const Vector3& value, bool writeType)
+{
+	if (writeType)
+		stream.WriteByte((byte)214);
+	else
+		stream.WriteByte((byte)86);
+
+	WriteCompressedUInt32(stream, value.GetSize());
+	WriteSingle(stream, value.x, false);
+	WriteSingle(stream, value.y, false);
+	WriteSingle(stream, value.z, false);
+}
+
+void Protocol18::WriteQuaternion(StreamBuffer& stream, const Quaternion& value, bool writeType)
+{
+	if (writeType)
+		stream.WriteByte((byte)209);
+	else
+		stream.WriteByte((byte)81);
+
+	WriteCompressedUInt32(stream, value.GetSize());
+	WriteSingle(stream, value.x, false);
+	WriteSingle(stream, value.y, false);
+	WriteSingle(stream, value.z, false);
+	WriteSingle(stream, value.w, false);
+}
+
 
 bool Protocol18::WriteArrayType(StreamBuffer& stream, const Object* object, GpType& writeType)
 {
 	if (object->GetType() == nullptr)
 	{
-		runtime_error("cannot serialize array type");
+		throw runtime_error("cannot serialize array type");
 		return false;
 	}
 
@@ -427,7 +458,7 @@ void Protocol18::WriteHashTable(StreamBuffer& stream,const Hashtable& value, boo
 		stream.WriteByte((byte)21);
 	this->WriteIntLength(stream, value.Count());
 
-	for (auto it = value.begin(); it != value.end(); ++it)
+	for (auto it = value.Begin(); it != value.End(); ++it)
 	{
 		this->Write(stream, it->first, true);
 		this->Write(stream, it->second, true);
@@ -460,7 +491,7 @@ void Protocol18::WriteDictionaryHeader(StreamBuffer& stream,const Dictionary& di
 	{
 		if (dic.begin()->first->IsArray() || (dic.begin()->first->IsPrimitive() == false && dic.begin()->first->GetType()->raw_name() != typeid(wstring_).raw_name()))
 		{
-			runtime_error("This is an unsupported key type.");
+			throw runtime_error("This is an unsupported key type.");
 			return;
 		}
 		keyType = GetCodeOfType(dic.begin()->first);
@@ -477,14 +508,14 @@ void Protocol18::WriteDictionaryHeader(StreamBuffer& stream,const Dictionary& di
 	else if (dic.begin()->second->IsArray())
 	{
 		if (!this->WriteArrayType(stream, dic.begin()->second, valueType))
-			runtime_error("This dictionary value cannot be serialized.");
+			throw runtime_error("This dictionary value cannot be serialized.");
 		//오류 처리
 	}
 	else
 	{
 		valueType = this->GetCodeOfType(dic.begin()->second);
 		if (valueType == GpType::Unknown)
-			runtime_error("This dictionary value cannot be serialized.");
+			throw runtime_error("This dictionary value cannot be serialized.");
 		if (valueType == GpType::Dictionary)
 		{
 			stream.WriteByte((byte)valueType);
@@ -510,14 +541,14 @@ void Protocol18::WriteDictionary(StreamBuffer& stream,const Dictionary& dic, boo
 	this->WriteDictionaryElements(stream, dic, keyType, valueType);
 }
 
-void Protocol18::WriteObjectArray(StreamBuffer& stream, const vector<Object>& value, bool writeType)
+void Protocol18::WriteObjectArray(StreamBuffer& stream, const vector<Object*>& value, bool writeType)
 {
 	if (writeType)
 		stream.WriteByte((byte)23);
 	this->WriteIntLength(stream, value.size());
 	for (int i = 0; i < value.size(); ++i)
 	{
-		const Object* obj = &value[i];
+		const Object* obj = value[i];
 		this->Write(stream, obj, true);
 	}
 }
@@ -714,7 +745,7 @@ void Protocol18::WriteParameterTable(StreamBuffer& stream,const unordered_map<by
 
 int Protocol18::DecodeZigZag32(unsigned int value)
 {
-	return int(((long)(value >> 1) ^ (-(long)(value & 1U))));
+	return int(((long long)(value >> 1) ^ (-(long long)(value & 1U))));
 }
 
 long long Protocol18::DecodeZigZag64(unsigned long long value)
@@ -809,6 +840,7 @@ unsigned int Protocol18::ReadCompressedUInt32(StreamBuffer& stream)
 	{
 		if (position >= _msize(buffer))
 		{
+			throw runtime_error("failed to read full unsigned long");
 			//오류처리
 		}
 		byte num3 = buffer[position];
@@ -837,7 +869,7 @@ unsigned long long Protocol18::ReadCompressedUInt64(StreamBuffer& stream)
 	{
 		if (position >= _msize(buffer))
 		{
-			runtime_error("Failed to read full unsigned long");
+			throw runtime_error("Failed to read full unsigned long");
 		}
 		byte num3 = buffer[position];
 		++position;
@@ -858,6 +890,28 @@ int Protocol18::ReadInt1(StreamBuffer& stream, bool signNagative)
 int Protocol18::ReadInt2(StreamBuffer& stream, bool signNagative)
 {
 	return signNagative ? -(this->ReadUShort(stream)) : this->ReadUShort(stream);
+}
+
+Vector3* Protocol18::ReadVector3(StreamBuffer& stream)
+{
+	int count = (int)this->ReadCompressedUInt32(stream);
+	float x, y, z;
+	x = this->ReadSingle(stream);
+	y = this->ReadSingle(stream);
+	z = this->ReadSingle(stream);
+	return new Vector3(x,y,z);
+}
+
+Quaternion* Protocol18::ReadQuaternion(StreamBuffer& stream)
+{
+	int count = (int)this->ReadCompressedUInt32(stream);
+	float x, y, z, w;
+	x = this->ReadSingle(stream);
+	y = this->ReadSingle(stream);
+	z = this->ReadSingle(stream);
+	w = this->ReadSingle(stream);
+
+	return new Quaternion(x, y, z, w);
 }
 
 Hashtable* Protocol18::ReadHashtable(StreamBuffer& stream)
@@ -919,7 +973,7 @@ bool Protocol18::ReadDictionaryElements(StreamBuffer& stream, GpType& keyType, G
 		if (key != nullptr)
 			dic.Insert(make_pair(key, value));
 		else
-			runtime_error("Dictionary key is null");
+			throw runtime_error("Dictionary key is null");
 	}
 	return true;
 }
@@ -935,6 +989,17 @@ Dictionary* Protocol18::ReadDictionary(StreamBuffer& stream)
 	Dictionary* dic = new Dictionary();
 	this->ReadDictionaryElements(stream, keyType, valueType, *dic);
 	return dic;
+}
+
+vector_<Object*>* Protocol18::ReadObjectArray(StreamBuffer& stream)
+{
+	unsigned int length = this->ReadCompressedUInt32(stream);
+	vector_<Object*>* vec = new vector_<Object*>(length);
+	for (int i = 0; i < length; ++i)
+	{
+		(**vec)[i] = this->Read(stream);
+	}
+	return vec;
 }
 
 vector_<Object*>* Protocol18::ReadArrayInArray(StreamBuffer& stream)
@@ -1073,9 +1138,11 @@ vector_<long long>* Protocol18::ReadCompressedInt64Array(StreamBuffer& stream)
 vector_<wstring_>* Protocol18::ReadStringArray(StreamBuffer& stream)
 {
 	vector_<wstring_>* strArray = new vector_<wstring_>(this->ReadCompressedUInt32(stream));
+	cout <<"string size size size:" <<  strArray->GetSize() << endl;
 	for (int i = 0; i < strArray->GetSize(); ++i)
 	{
 		(**strArray)[i] = this->ReadString(stream);
+		cout << "Read String string string string" << endl;
 	}
 	return strArray;
 }
@@ -1107,8 +1174,8 @@ vector_<Hashtable*>* Protocol18::ReadHashtableArray(StreamBuffer& stream)
 
 unordered_map<byte, Object*>* Protocol18::ReadParameterTable(StreamBuffer& stream, unordered_map<byte, Object*>* target)
 {
-	short num = (short)stream.ReadByte();
-	unordered_map<byte, Object*>* map = target != NULL ? target : new unordered_map<byte, Object*>((int)num);
+	int num = (int)stream.ReadByte();
+	unordered_map<byte, Object*>* map = target != NULL ? target : new unordered_map<byte, Object*>(num);
 	for (int i = 0; i < (int)num; ++i)
 	{
 		byte key = stream.ReadByte();
@@ -1131,33 +1198,43 @@ void Protocol18::SerializeOperationRequest(StreamBuffer& stream, byte opCode,con
 
 
 
-void Protocol18::SerializeOperationRequest(StreamBuffer& stream,const OperationRequest& serObject, bool setType)
+void Protocol18::SerializeOperationRequest(StreamBuffer& stream,const PK_OperationRequest& serObject, bool setType)
 {
-	this->SerializeOperationRequest(stream, serObject.OperationCode, *serObject.Parameters, setType);
+	this->SerializeOperationRequest(stream, serObject.m_operationCode, *serObject.m_parameters, setType);
 }
 
-void Protocol18::SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType)
+void Protocol18::SerializeOperationResponse(StreamBuffer& stream, const PK_OperationResponse& serObject, bool setType)
 {
 	if (setType)
 		stream.WriteByte((byte)25);
-	stream.WriteByte(serObject.OperatoinCode);
-	this->WriteInt16(stream, serObject.ReturnCode, false);
-	if (serObject.DebugMessage.empty())
+	stream.WriteByte(serObject.m_operationCode);
+	this->WriteInt16(stream, serObject.m_returnCode, false);
+	if (serObject.m_debugMessage.empty())
 	{
 		stream.WriteByte((byte)0);
 	}
 	else
 	{
-		this->WriteString(stream, serObject.DebugMessage, true);
+		this->WriteString(stream, serObject.m_debugMessage, true);
 	}
-	this->WriteParameterTable(stream, *serObject.Parameters);
+	this->WriteParameterTable(stream, *serObject.m_parameters);
+}
+
+void Protocol18::SerializeEventData(StreamBuffer& stream, const PK_EventData& serObject, bool setType)
+{
+	if (setType)
+		stream.WriteByte((byte)26);
+	stream.WriteByte(serObject.m_eventCode);
+	WriteParameterTable(stream, *serObject.m_parameters);
+
+
 }
 
 
 void Protocol18::Write(StreamBuffer& stream,const Object* object, bool writeType)
 {
 
-	if (object->GetData() == NULL)
+	if (object->GetData() == nullptr)
 		this->Write(stream, object, GpType::Null, writeType);
 	else
 		this->Write(stream, object, this->GetCodeOfType(object), writeType);
@@ -1247,9 +1324,16 @@ void Protocol18::Write(StreamBuffer& stream, const Object* value, GpType gpType,
 		this->WriteHashtableArray(stream, **(vector_<Hashtable>*)value, writeType);
 		break;
 
+	case GpType::Quaternion:
+		this->WriteQuaternion(stream, *(Quaternion*)value, writeType);
+		break;
+
+	case GpType::Vector3:
+		this->WriteVector3(stream, *(Vector3*)value, writeType);
+		break;
 
 	default:
-		runtime_error("Uknown type");
+		throw runtime_error("Uknown type");
 		break;
 	}
 }
@@ -1302,6 +1386,8 @@ Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 		return this->ReadDictionary(stream);
 	case (byte)21:
 		return this->ReadHashtable(stream);
+	case (byte)23:
+		return this->ReadObjectArray(stream);
 
 	//case (byte)24:
 	//	return this->DeserializeOperationRequest(stream);
@@ -1365,8 +1451,24 @@ Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 	case (byte)85:
 		return this->ReadHashtableArray(stream);
 
+	//case (byte)81:
+	//	return this->ReadQuaternion(stream);
+	//case(byte)86:
+	//	return this->ReadVector3(stream);
+
+	case (byte)209:
+		return this->ReadQuaternion(stream);
+	case (byte)214:
+		return this->ReadVector3(stream);
+
+		
+
 	default:
-		runtime_error("Read Fail");
+	{
+		return new Object();
+		/*string s = "Read Fail. Type : " + gpType;
+		throw std::runtime_error(s);*/
+	}
 			break;
 	}
 }
@@ -1418,13 +1520,13 @@ const type_info* Protocol18::GetAllowedDictionaryKeyType(GpType gpType)
 	return nullptr;
 }
 
-OperationRequest* Protocol18::DeserializeOperationRequest(StreamBuffer& stream)
+PK_OperationRequest* Protocol18::DeserializeOperationRequest(StreamBuffer& stream)
 {
-	OperationRequest* op = new OperationRequest();
-	op->OperationCode = stream.ReadByte();
-	op->Parameters = this->ReadParameterTable(stream);
+	PK_OperationRequest* op = new PK_OperationRequest();
+	op->m_operationCode = stream.ReadByte();
+	op->m_parameters = this->ReadParameterTable(stream);
 
-	for (auto it = op->Parameters->begin(); it != op->Parameters->end(); ++it)
+	for (auto it = op->m_parameters->begin(); it != op->m_parameters->end(); ++it)
 	{
 		cout << "Pram Code : " << (int)it->first << endl;
 		cout << "TYPE : " << it->second->GetType()->name() << endl;
@@ -1433,14 +1535,14 @@ OperationRequest* Protocol18::DeserializeOperationRequest(StreamBuffer& stream)
 	//return &OperationRequest();
 }
 
-OperationResponse* Protocol18::DeserializeOperationResponse(StreamBuffer& stream)
+PK_OperationResponse* Protocol18::DeserializeOperationResponse(StreamBuffer& stream)
 {
-	OperationResponse* op = new OperationResponse();
-	op->OperatoinCode = this->ReadByte(stream);
-	op->ReturnCode = this->ReadInt16(stream);
+	PK_OperationResponse* op = new PK_OperationResponse();
+	op->m_operationCode = this->ReadByte(stream);
+	op->m_returnCode = this->ReadInt16(stream);
 	this->ReadByte(stream);
-	op->DebugMessage = this->ReadString(stream);
-	op->Parameters = this->ReadParameterTable(stream);
+	op->m_debugMessage = this->ReadString(stream);
+	op->m_parameters = this->ReadParameterTable(stream);
 	return op;
 	//return& OperationResponse();
 }

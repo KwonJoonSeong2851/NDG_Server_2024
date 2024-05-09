@@ -4,7 +4,7 @@
 void ServerProcess()
 {
 	shared_ptr<Server> mainServer(new IOCPServer(new MainProcess()));
-	
+	Clock::GetInstance().Initialize();
 	if (!mainServer->Run())
 	{
 		SLOG(L"Error :main server start fail");

@@ -28,6 +28,7 @@ private:
 
 public:
 	Lock(const WCHAR* name);
+	//Lock(const std::wstring* name);
 	virtual ~Lock();
 
 	const WCHAR* Name();

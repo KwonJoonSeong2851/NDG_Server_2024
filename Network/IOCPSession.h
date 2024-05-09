@@ -49,6 +49,7 @@ private:
 	OVERLAPPED m_overlapped;
 	IO_OPERATION m_ioType;
 	size_t m_totalBytes;
+public:
 	size_t m_currentBytes;
 
 	std::array<char, SOCKET_BUF_SIZE> m_buffer;

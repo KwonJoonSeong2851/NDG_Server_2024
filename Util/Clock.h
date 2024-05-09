@@ -59,10 +59,11 @@ using namespace std;
 typedef system_clock::time_point timePoint;
 
 
-
+class Thread;
 class Clock : public Singleton<Clock>
 {
 private:
+	Thread* m_cachThread;
 	bool m_cachRunning = false;
 	tick_t m_serverStartTick;
 
@@ -74,6 +75,7 @@ public:
 	Clock();
 	~Clock();
 
+	void Initialize();
 	tick_t ServerStartTick();
 	tick_t SystemTick();
 	tick_t StrToTick(wstr_t str, const WCHAR* fmt = (WCHAR*)DB_TIME_FORMAT);

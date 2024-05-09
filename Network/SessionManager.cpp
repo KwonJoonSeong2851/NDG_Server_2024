@@ -47,7 +47,7 @@ bool SessionManager::AddSession(Session* session)
 
 	if (m_sessionCount > m_maxConnection)
 	{
-		SLOG(L"SessionManager : session so busy. count[%d]", m_sessionCount);
+		SLOG(L"SessionManager : session is full. count[%d]", m_sessionCount);
 		return false;
 	}
 

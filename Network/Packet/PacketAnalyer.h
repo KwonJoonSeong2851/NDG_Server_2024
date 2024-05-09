@@ -9,7 +9,7 @@
 class PacketAnalyzer : public Singleton<PacketAnalyzer>
 {
 private:
-	Protocol* protocol;
+	Protocol* m_protocol;
 public:
 	PacketAnalyzer();
 	~PacketAnalyzer();

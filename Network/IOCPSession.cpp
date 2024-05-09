@@ -29,19 +29,23 @@ bool IoData::NeedMoreIo(size_t transferSize)
 
 int32_t IoData::SetupTotalBytes()
 {
-	packet_size_t offset = 1;
+	packet_size_t offset = 0;
 	packet_size_t packetLen = 0;
 
 	if (m_totalBytes == 0)
 	{
 		char* buffer = m_buffer.data();
-		int num1 = (int)buffer[offset++] << 24;
-		int num2 = (int)buffer[offset++] << 16;
-		int num3 = (int)buffer[offset++] << 8;
-		packetLen = num1 | num2 | num3 | (int)buffer[offset++];
-		//return  num1 | num2 | num3 | (int)bufferAndAdvance[offset + 3];
-		//memcpy_s((void*)packetLen, sizeof(packetLen), (void*)(m_buffer.data()), sizeof(packetLen));
-		//m_totalBytes = ntohl((size_t)packetLen[0]);
+		
+		if (buffer[0] == (char)240) //ping 헤더일시 5byte 고정
+		{
+			m_totalBytes = (int)5;
+			return ++offset;
+		}
+		int num1 = (int)buffer[++offset] << 24;
+		int num2 = (int)buffer[++offset] << 16;
+		int num3 = (int)buffer[++offset] << 8;
+		packetLen = num1 | num2 | num3 | (int)buffer[++offset];
+
 		m_totalBytes = packetLen;
 	}
 	
@@ -155,6 +159,12 @@ bool IOCPSession::IsRecving(size_t transferSize)
 {
 	if (m_ioData[IO_READ].NeedMoreIo(transferSize))
 	{
+		SLOG(L"NeedMoreIO !!! curByte = %d,  totalByte = %d", m_ioData[IO_READ].m_currentBytes, m_ioData[IO_READ].GetTotalBytes());
+		string s = "";
+		for (int i = 0; i < m_ioData[IO_READ].m_currentBytes; ++i)
+			s += (m_ioData[IO_READ].GetData())[i] + " ";
+		SLOG(L"NeedMoreIO DATA: %s", s.c_str());
+
 		this->Recv(m_ioData[IO_READ].GetWSABuf());
 		return true;
 	}
@@ -184,8 +194,7 @@ void IOCPSession::Send(WSABUF wsaBuf)
 void IOCPSession::ReadPing(char* buf)
 {
 	int offset = 1;
-	m_sessionLocalTime = buf[offset++] >> 24 | buf[offset++] >> 16 | buf[offset++] >> 8 | buf[offset++];
-	SLOG(L"Recv Ping : session time = %d", m_sessionLocalTime);
+	m_protocol->Deserialize(m_sessionLocalTime, (unsigned char*)buf, offset);
 	UpdateHeartBeat();
 	SendPing();
 }
@@ -193,15 +202,13 @@ void IOCPSession::ReadPing(char* buf)
 void IOCPSession::SendPing()
 {
 	int offset = 1;
-	m_protocol->Serialize(NOW_MILLISEC_INT32, m_pingResponsePacket, offset);
-	m_protocol->Serialize(m_sessionLocalTime, m_pingResponsePacket, offset);
+	m_protocol->Serialize(NOW_MILLISEC_INT32, (char*)m_pingResponsePacket, offset);
+	m_protocol->Serialize(m_sessionLocalTime, (char*)m_pingResponsePacket, offset);
 
 	WSABUF wsaBuf;
 	wsaBuf.buf = (char*)m_pingResponsePacket;
 	wsaBuf.len = 9;
 	this->Send(wsaBuf);
-	this->RecvStandBy();
-
 }
 
 void IOCPSession::OnSend(size_t transferSize)
@@ -234,7 +241,9 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 
 Package* IOCPSession::OnRecv(size_t transferSize)
 {
-	m_ioData[IO_READ].SetupTotalBytes();
+	SLOG(L"Transfer size : %d ", transferSize);
+	packet_size_t offset = 0;
+	offset += m_ioData[IO_READ].SetupTotalBytes();
 
 	if (this->IsRecving(transferSize))
 	{
@@ -242,21 +251,23 @@ Package* IOCPSession::OnRecv(size_t transferSize)
 	}
 
 	//handling ping
-	if (m_ioData[IO_READ].GetData()[0] == 240)
+	if (m_ioData[IO_READ].GetData()[0] == (char)240)
 	{
 		ReadPing(m_ioData[IO_READ].GetData());
 		this->RecvStandBy();
 		return nullptr;
 	}
 
-
+	
 	//handling packet head 
 
 	Packet* packet = PacketAnalyzer::GetInstance().Analyzer(m_ioData[IO_READ].GetData(), m_ioData[IO_READ].GetTotalBytes());
 
 	if (packet == nullptr)
 	{
-		SLOG(L"IOCPSession : Invalid Packet !!!");
+		SLOG(L"IOCPSession : Invalid Packet !!! recev packet Size : %d", m_ioData[IO_READ].GetTotalBytes());
+	
+		cout << "Invalid Packet Data" << endl << endl << endl;
 		this->OnClose();
 		return nullptr;
 	}

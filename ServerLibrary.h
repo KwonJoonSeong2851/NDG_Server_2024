@@ -57,8 +57,7 @@ typedef void(*Funcation)(void*);
 #include "./Util/tinyxml/tinyxml.h"
 
 
-
-
+//유틸
 #include "./Util/Util.h"
 #include "./Util/Type.h"
 
@@ -71,20 +70,25 @@ typedef void(*Funcation)(void*);
 #include "./Util/Task.h"
 #include "./Util/ThreadJobQueue.h"
 
-#include "./Network/Enum.h"
+
+//Packet 처리
+#include "./Network/Enums.h"
 #include "./Network/StreamBuffer.h"
 #include "./Network/Packet/PacketHeader.h"
 #include "./Network/Packet/PacketClass.h"
-
-#include "./Network/Packet/Object.h"
 #include "./Network/Packet/GpType.h"
-#include "./Network/Packet/generic_.h"
-#include "./Network/Packet/wstring_.h"
-#include "./Network/Packet/vector_.h"
-#include "./Network/Packet/Dictionary.h"
-#include "./Network/Packet/Hashtable.h"
-#include "./Network/Packet/Operation.h"
 
+#include "./Network/Packet/CustomType/Object.h"
+#include "./Network/Packet/CustomType/generic_.h"
+#include "./Network/Packet/CustomType/wstring_.h"
+#include "./Network/Packet/CustomType/vector_.h"
+#include "./Network/Packet/CustomType/Dictionary.h"
+#include "./Network/Packet/CustomType/Hashtable.h"
+#include "./Network/Packet//CustomType/GameCustomType/Vector3.h"
+#include "./Network/Packet//CustomType/GameCustomType/Quaternion.h"
+
+
+#include "./Network/Packet/Operation.h"
 #include "./Network/Protocol.h"
 #include "./Network/Packet/Protocol18.h"
 #include "./Network/Packet/PacketAnalyer.h"
@@ -96,14 +100,16 @@ typedef void(*Funcation)(void*);
 
 
 
+#include "./Network/Peer.h"
 
 
+//#ifndef C_UNITYPEER_H
+//#include "./Network/C_UnityPeer.h"
+//#endif // !C_UNITYPEER_H
 
 
 
 //네트워크
-//#include "./Network/Peer.h"
-#include "./Network/C_UnityPeer.h"
 
 #include "./Network/Session.h"
 #include "./Network/SessionManager.h"
@@ -120,15 +126,14 @@ typedef void(*Funcation)(void*);
 
 
 
+///Game /// 
 
 
-//패킷 처리
+#include "Game/Room.h"
+#include "Game/Lobby.h"
+#include "Game/LobbyManager.h"
 
 
-//패킷 종류
-
-
-//#include "./Network/Packet/Protocol.h"
 
 
 

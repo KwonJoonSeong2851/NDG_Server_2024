@@ -5,17 +5,17 @@
 
 Clock::Clock()
 {
-	m_serverStartTick = this->SystemTick();
-
-	if (this->GetInstance().m_cachRunning == false)
-	{
-		this->GetInstance().m_cachRunning = true;
-	//	MAKE_THREAD(Clock, TimeCaching);
-	}
+	m_serverStartTick = this->SystemTick();	
 }
 
 Clock::~Clock()
 {
+}
+
+void Clock::Initialize()
+{
+	m_cachRunning = true;
+	m_cachThread = MAKE_THREAD(Clock, TimeCaching);
 }
 
 wstr_t Clock::TickToStr(tick_t tick,const WCHAR* fmt)
@@ -30,6 +30,7 @@ wstr_t Clock::TickToStr(tick_t tick,const WCHAR* fmt)
 
 	return timeStr.data();
 }
+
 
 tick_t Clock::ServerStartTick()
 {
@@ -118,10 +119,11 @@ DayOfTheWeek Clock::TodayOfTheWeek()
 
 void Clock::TimeCaching()
 {
-	//while (m_cachRunning)
-	//{
-	//	long long t = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-	//	m_nowMilliSecInt32 = (int)(t & 0XFFFFFFFF);
-	//	this_thread::sleep_for(milliseconds(1));
-	//}
+	while (m_cachRunning)
+	{
+
+		long long t = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		m_nowMilliSecInt32 = (int)(t & 0xffffffff);
+		this_thread::sleep_for(milliseconds(1));
+	}
 }

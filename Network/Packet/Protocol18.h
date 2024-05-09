@@ -56,6 +56,9 @@ private:
 	void WriteSingle(StreamBuffer& stream, const float& value, bool writeType);
 	void WriteDouble(StreamBuffer& stream, const double& value, bool writeType);
 	void WriteString(StreamBuffer& stream, const wstring& value, bool writeType);
+
+	void WriteVector3(StreamBuffer& stream, const Vector3& value, bool writeType);
+	void WriteQuaternion(StreamBuffer& stream, const Quaternion& value, bool writeType);
 	
 	//void WriteCustomType(StreamBuffer& stream, Object* value, bool writeType);
 	void WriteHashTable(StreamBuffer& stream, const Hashtable& value, bool writeType);
@@ -63,7 +66,7 @@ private:
 	void WriteDictionaryHeader(StreamBuffer& stream, const Dictionary& value, GpType& keyType, GpType& valueType);
 	void WriteDictionary(StreamBuffer& stream, const Dictionary& value, bool writeType);
 	bool WriteArrayType(StreamBuffer& stream, const Object* object, GpType& writeType);
-	void WriteObjectArray(StreamBuffer& stream, const vector<Object>& value, bool writeType);
+	void WriteObjectArray(StreamBuffer& stream, const vector<Object*>& value, bool writeType);
 	void WriteArrayInArray(StreamBuffer& stream, const Object* object, bool writeType);
 	void WriteBoolArray(StreamBuffer& stream, const vector<bool>& value, bool writeType);
 	void WriteByteArray(StreamBuffer& stream, const vector<byte>& value, bool writeType);
@@ -100,6 +103,10 @@ private:
 	unsigned long long ReadCompressedUInt64(StreamBuffer& stream);
 	int ReadInt1(StreamBuffer& stream, bool signNagative);
 	int ReadInt2(StreamBuffer& stream, bool signNagative);
+
+	Vector3* ReadVector3(StreamBuffer& stream);
+	Quaternion* ReadQuaternion(StreamBuffer& stream);
+
 	wstring_ ReadString(StreamBuffer& stream);
 	Hashtable* ReadHashtable(StreamBuffer& stream);
 	void ReadDictionaryType(StreamBuffer& stream, GpType& keyType, GpType& valueType);
@@ -114,7 +121,7 @@ private:
 	vector_<int>* ReadCompressedInt32Array(StreamBuffer& stream);
 	vector_<long long>* ReadCompressedInt64Array(StreamBuffer& stream);
 	//vector_<CustomType> ReadCustomTypeArray(StreamBuffer& stream);
-
+	vector_<Object*>* ReadObjectArray(StreamBuffer& stream);
 	vector_<Object*>* ReadArrayInArray(StreamBuffer& stream);
 	vector_<wstring_>* ReadStringArray(StreamBuffer& stream);
 	vector_<Dictionary*>* ReadDictionaryArray(StreamBuffer& stream);
@@ -135,11 +142,12 @@ public:
 	GpType GetCodeOfType(const Object* object);
 	void Serialize(StreamBuffer& stream,const Object* object, bool setType);
 
-	virtual void SerializeOperationRequest(StreamBuffer& stream, const OperationRequest& serObject, bool setType) override;
-	virtual void SerializeOperationResponse(StreamBuffer& stream, const OperationResponse& serObject, bool setType) override;
+	virtual void SerializeOperationRequest(StreamBuffer& stream, const PK_OperationRequest& serObject, bool setType) override;
+	virtual void SerializeOperationResponse(StreamBuffer& stream, const PK_OperationResponse& serObject, bool setType) override;
+	virtual void SerializeEventData(StreamBuffer& stream, const PK_EventData& serObject, bool setType) override;
 
-	virtual OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) override;
-	virtual OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) override;
+	virtual PK_OperationRequest* DeserializeOperationRequest(StreamBuffer& stream) override;
+	virtual PK_OperationResponse* DeserializeOperationResponse(StreamBuffer& stream) override;
 	Object* Deserialize(StreamBuffer& stream, byte type);
 
 };
