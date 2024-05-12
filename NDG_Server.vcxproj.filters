@@ -1,32 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Network">
-      <UniqueIdentifier>{c134b0c5-ab4b-46f1-b3b5-17ed261d7800}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{6c558a3b-4a8d-48fc-bbf7-322e701b3047}</UniqueIdentifier>
     </Filter>
     <Filter Include="Util\tinyxml">
       <UniqueIdentifier>{8db18b90-0daf-464b-9514-f337bd29b790}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\Packet">
-      <UniqueIdentifier>{66160926-aa6f-4405-a80d-9d02dc831761}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PCH">
       <UniqueIdentifier>{f8269acc-b5a1-4997-ae18-36de2e7ff1fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Network\Packet\CustomType">
-      <UniqueIdentifier>{9329bddc-d8cd-4b60-aece-b2e3c7e7b6e1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{a90c1854-2dfd-46b6-a4c5-b15225576ca8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CustomType">
+      <UniqueIdentifier>{9329bddc-d8cd-4b60-aece-b2e3c7e7b6e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomType\GameCustomType">
+      <UniqueIdentifier>{46457028-f56f-47e9-b513-82f0b423532c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{c134b0c5-ab4b-46f1-b3b5-17ed261d7800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Packet">
+      <UniqueIdentifier>{66160926-aa6f-4405-a80d-9d02dc831761}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Network\Peer">
       <UniqueIdentifier>{b0d55ccc-c976-4fe2-ad38-1683490405a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\Packet\CustomType\GameCustomType">
-      <UniqueIdentifier>{46457028-f56f-47e9-b513-82f0b423532c}</UniqueIdentifier>
+    <Filter Include="Network\Process">
+      <UniqueIdentifier>{f2bca14a-e765-4151-95ac-22bdda07499f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,15 +76,6 @@
     <ClInclude Include="Network\SessionManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Network\TerminalSession.h">
-      <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Terminal.h">
-      <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\TerminalManager.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\PacketHeader.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
@@ -89,9 +83,6 @@
       <Filter>Network\Packet</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\Package.h">
-      <Filter>Network\Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\ContentsProcess.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
     <ClInclude Include="Network\Shutdown.h">
@@ -105,9 +96,6 @@
     </ClInclude>
     <ClInclude Include="Util\Config.h">
       <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Packet\MainProcess.h">
-      <Filter>Network\Packet</Filter>
     </ClInclude>
     <ClInclude Include="Network\HeartBeat.h">
       <Filter>Network</Filter>
@@ -146,31 +134,37 @@
       <Filter>Network\Peer</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\GameCustomType\Vector3.h">
-      <Filter>Network\Packet\CustomType\GameCustomType</Filter>
+      <Filter>CustomType\GameCustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\GameCustomType\Quaternion.h">
-      <Filter>Network\Packet\CustomType\GameCustomType</Filter>
+      <Filter>CustomType\GameCustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\Dictionary.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\generic_.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\Hashtable.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\Object.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\vector_.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\CustomType\wstring_.h">
-      <Filter>Network\Packet\CustomType</Filter>
+      <Filter>CustomType</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\GpType.h">
       <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\ContentsProcess.h">
+      <Filter>Network\Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet\MainProcess.h">
+      <Filter>Network\Process</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,18 +198,6 @@
     <ClCompile Include="Network\SessionManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="Network\TerminalSession.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\Terminal.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\TerminalManager.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\Packet\ContentsProcess.cpp">
-      <Filter>Network\Packet</Filter>
-    </ClCompile>
     <ClCompile Include="Util\tinyxml\tinystr.cpp">
       <Filter>Util\tinyxml</Filter>
     </ClCompile>
@@ -232,9 +214,6 @@
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="NDG_Server_Main.cpp" />
-    <ClCompile Include="Network\Packet\MainProcess.cpp">
-      <Filter>Network\Packet</Filter>
-    </ClCompile>
     <ClCompile Include="Network\HeartBeat.cpp">
       <Filter>Network</Filter>
     </ClCompile>
@@ -264,6 +243,12 @@
     </ClCompile>
     <ClCompile Include="Network\C_UnityPeer.cpp">
       <Filter>Network\Peer</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Packet\ContentsProcess.cpp">
+      <Filter>Network\Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Packet\MainProcess.cpp">
+      <Filter>Network\Process</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

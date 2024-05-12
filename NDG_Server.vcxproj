@@ -186,9 +186,6 @@
     <ClInclude Include="Network\Session.h" />
     <ClInclude Include="Network\SessionManager.h" />
     <ClInclude Include="Network\Shutdown.h" />
-    <ClInclude Include="Network\Terminal.h" />
-    <ClInclude Include="Network\TerminalManager.h" />
-    <ClInclude Include="Network\TerminalSession.h" />
     <ClInclude Include="ServerLibrary.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Util\Clock.h" />
@@ -223,9 +220,6 @@
     <ClCompile Include="Network\Session.cpp" />
     <ClCompile Include="Network\SessionManager.cpp" />
     <ClCompile Include="Network\StreamBuffer.cpp" />
-    <ClCompile Include="Network\Terminal.cpp" />
-    <ClCompile Include="Network\TerminalManager.cpp" />
-    <ClCompile Include="Network\TerminalSession.cpp" />
     <ClCompile Include="Util\Clock.cpp" />
     <ClCompile Include="Util\Config.cpp" />
     <ClCompile Include="Util\Lock.cpp" />

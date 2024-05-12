@@ -120,11 +120,6 @@ typedef void(*Funcation)(void*);
 #include "./Network/IOCPSession.h"
 #include "./Network/HeartBeat.h"
 
-#include "./Network/TerminalSession.h"
-#include "./Network/Terminal.h"
-#include "./Network/TerminalManager.h"
-
-
 
 ///Game /// 
 

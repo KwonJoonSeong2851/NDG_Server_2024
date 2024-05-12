@@ -32,9 +32,9 @@ Server::~Server()
 
 void Server::Initialize(xml_t* config)
 {
-	TerminalManager::GetInstance().Run(this);
+	//TerminalManager::GetInstance().Run(this);
 
-	TaskManager::GetInstance();
+	//TaskManager::GetInstance();
 
 	xmlNode_t* root = config->FirstChildElement("App")->FirstChildElement("Server");
 	if (!root)
