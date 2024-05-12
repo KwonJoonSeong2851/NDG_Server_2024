@@ -23,6 +23,7 @@ Peer::~Peer()
 
 void Peer::SendPacket(Packet* packet)
 {
+	if(m_session != nullptr)
 	m_session->SendPacket(packet);
 }
 

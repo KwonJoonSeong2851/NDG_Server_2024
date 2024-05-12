@@ -134,7 +134,7 @@ void StreamBuffer::Write(const byte* buffer, int srcOffset, int count)
 
 byte StreamBuffer::ReadByte()
 {
-	std::cout << "Pos " << this->pos << " len " << len << endl;
+	//std::cout << "Pos " << this->pos << " len " << len << endl;
 	return this->pos < this->len ? this->buf[this->pos++] : throw std::runtime_error("StreamBuffer.ReadByte() failed.");
 }
 

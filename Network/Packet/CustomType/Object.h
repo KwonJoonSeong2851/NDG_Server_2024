@@ -11,13 +11,14 @@ protected:
 	void* dataPointer;
 	unsigned int size = 0;
 	bool isArray = false;
-	bool isPrimitive = false;
+	bool isPrimitive = true;
 
 public:
     Object() 
 	{
 		dataPointer = nullptr;
 		typeInfo = &typeid(Object);
+		size = 0;
 	}
 	virtual ~Object() {}
 

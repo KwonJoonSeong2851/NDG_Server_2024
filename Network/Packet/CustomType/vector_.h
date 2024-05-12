@@ -11,22 +11,14 @@ private:
 public:
 	vector_()
 	{
-		this->typeInfo = &typeid(T);
+		this->typeInfo = &typeid(vector_<T>);
 		this->isArray = true;
 
-		data = new vector<T>(1);
-		if (is_pointer<T>::value)
+		data = new vector<T>();
+
+		if (is_pointer<T>::value || typeid(T) == typeid(wstring_))
 		{
-			this->element = (const Object*)new T();
-		} 
-		else if (typeid(T) == typeid(wstring_))
-		{
-			this->element = (const Object*)new wstring_();
 			this->isPrimitive = false;
-		}
-		else
-		{
-			this->isPrimitive = true;
 		}
 
 		this->dataPointer = data;
@@ -34,28 +26,15 @@ public:
 
 	vector_(int size)
 	{
-		//if (size <= 0)
-		//{
-		//	size = 1;
-		//}
 
-		this->typeInfo = &typeid(T);
+		this->typeInfo = &typeid(vector_<T>);
 		this->isArray = true;
 
 		data = new vector<T>(size);
 
-		if(is_pointer<T>::value)
+		if(is_pointer<T>::value || typeid(T) == typeid(wstring_))
 		{ 
-			this->element = (const Object*)new T();
-		}
-		else if (typeid(T) == typeid(wstring_))
-		{
-			this->element = (const Object*)new wstring_();
 			this->isPrimitive = false;
-		}
-		else
-		{
-			this->isPrimitive = true;
 		}
 
 		this->dataPointer = data;
@@ -63,24 +42,14 @@ public:
 
 	vector_(vector<T> value)
 	{
-		//data = value;
-		this->typeInfo = &typeid(T);
+		this->typeInfo = &typeid(vector_<T>);
 		this->isArray = true;
 
 		data = new vector<T>(value);
 
-		if (is_pointer<T>::value)
+		if (is_pointer<T>::value || typeid(T) == typeid(wstring_))
 		{
-			this->element = (const Object*)new T();
-		}
-		else if (typeid(T) == typeid(wstring_))
-		{
-			this->element = (const Object*)new wstring_();
 			this->isPrimitive = false;
-		}
-		else
-		{
-			this->isPrimitive = true;
 		}
 
 
@@ -89,9 +58,15 @@ public:
 
 	~vector_()
 	{
+		if constexpr (is_pointer<T>::value)
+		{
+			for (auto it = data->begin(); it != data->end(); it++)
+			{
+				delete (Object*)(*it);
+			}
+		}
+
 		delete data;
-		if (this->element != nullptr)
-			delete this->element;
 	}
 
 	 const int GetSize() const

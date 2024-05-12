@@ -75,7 +75,7 @@ typedef void(*Funcation)(void*);
 #include "./Network/Enums.h"
 #include "./Network/StreamBuffer.h"
 #include "./Network/Packet/PacketHeader.h"
-#include "./Network/Packet/PacketClass.h"
+
 #include "./Network/Packet/GpType.h"
 
 #include "./Network/Packet/CustomType/Object.h"
@@ -87,13 +87,13 @@ typedef void(*Funcation)(void*);
 #include "./Network/Packet//CustomType/GameCustomType/Vector3.h"
 #include "./Network/Packet//CustomType/GameCustomType/Quaternion.h"
 
+#include "./Network/Packet/Package.h"
+#include "./Network/Packet/PacketClass.h"
 
-#include "./Network/Packet/Operation.h"
 #include "./Network/Protocol.h"
 #include "./Network/Packet/Protocol18.h"
 #include "./Network/Packet/PacketAnalyer.h"
 
-#include "./Network/Packet/Package.h"
 
 #include "Network/Packet/ContentsProcess.h"
 

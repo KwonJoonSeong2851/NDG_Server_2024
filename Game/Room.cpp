@@ -108,11 +108,12 @@ void Room::OnInstantiationGO(Peer* sender, Object* eventContent)
 		if (sender->GetActorNumber() != p->GetActorNumber())
 			p->SendPacket(ev);
 	}
+
+	SAFE_DELETE(ev);
 }
 
 void Room::OnSerialize(Peer* sender, Object* eventContent)
 {
-	SAFE_LOCK(m_lock);
 	PK_EventData* ev = new PK_EventData();
 	int senderActorNum = sender->GetActorNumber();
 	ev->SetSender(senderActorNum);
@@ -121,10 +122,27 @@ void Room::OnSerialize(Peer* sender, Object* eventContent)
 
 	for (auto p : m_playerList)
 	{
-		if (sender->GetActorNumber() != senderActorNum)
+		if (p->GetActorNumber() != senderActorNum)
 			p->SendPacket(ev);
 	}
 
+	SAFE_DELETE(ev);
+}
+
+void Room::OnRPC(Peer* sender, Object* eventContent)
+{
+	PK_EventData* ev = new PK_EventData();
+	ev->SetSender(sender->GetActorNumber());
+	ev->m_eventCode = GameEventCode::RPC;
+	ev->SetCustomData(eventContent->Copy());
+
+	for (auto p : m_playerList)
+	{
+		if (p->GetActorNumber() != ev->GetSender())
+			p->SendPacket(ev);
+	}
+
+	SAFE_DELETE(ev);
 }
 
 wstring Room::GetName()

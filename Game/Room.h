@@ -33,8 +33,11 @@ public:
 	void CacheProperties(Hashtable* roomProperties);
 	void OnRoomPropertiesChanged(Hashtable* changedHash);
 	void OnPlayerPropertiesChanged(int target, Hashtable* changedHash);
+
+	//분리 필요해보임
 	void OnInstantiationGO(Peer* sender, Object* eventContent);
 	void OnSerialize(Peer* sender, Object* eventContent);
+	void OnRPC(Peer* sender, Object* eventContent);
 
 	wstring GetName();
 	list<Peer*>& GetPlayerList();

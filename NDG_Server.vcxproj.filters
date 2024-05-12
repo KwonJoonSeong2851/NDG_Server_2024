@@ -85,9 +85,6 @@
     <ClInclude Include="Network\Packet\PacketHeader.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Packet\PacketClass.h">
-      <Filter>Network\Packet</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Packet\PacketAnalyer.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
@@ -118,7 +115,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>PCH</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Packet\Operation.h">
+    <ClInclude Include="Network\Packet\PacketClass.h">
       <Filter>Network\Packet</Filter>
     </ClInclude>
     <ClInclude Include="Network\Packet\Protocol18.h">

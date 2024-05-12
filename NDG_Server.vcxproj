@@ -173,10 +173,9 @@
     <ClInclude Include="Network\Packet\CustomType\wstring_.h" />
     <ClInclude Include="Network\Packet\GpType.h" />
     <ClInclude Include="Network\Packet\MainProcess.h" />
-    <ClInclude Include="Network\Packet\Operation.h" />
+    <ClInclude Include="Network\Packet\PacketClass.h" />
     <ClInclude Include="Network\Packet\Package.h" />
     <ClInclude Include="Network\Packet\PacketAnalyer.h" />
-    <ClInclude Include="Network\Packet\PacketClass.h" />
     <ClInclude Include="Network\Packet\PacketHeader.h" />
     <ClInclude Include="Network\Packet\Protocol18.h" />
     <ClInclude Include="Network\Packet\StreamBuffer.h" />

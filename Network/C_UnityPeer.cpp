@@ -48,7 +48,7 @@ void C_UnityPeer::OnJoinedRoom(Room* room)
 	op->m_parameters->insert(make_pair((byte)ParameterCode::ActorNr, new generic_<int>(m_actorNumber)));
 
 	auto list = room->GetPlayerList();
-	if (room->GetPlayerList().size() > 1)
+	if (list.size() > 1)
 	{
 		vector_<int>* playerList = new vector_<int>(list.size());
 		int i = 0;

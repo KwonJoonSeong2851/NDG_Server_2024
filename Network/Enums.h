@@ -10,6 +10,25 @@ enum class PeerStatusCode : unsigned char
 
 };
 
+enum class OperationCode : unsigned char
+{
+    Join = 255,
+    JoinLobby = 229,
+    LeaveLobby = 228,
+    CreateRoom = 227,
+    JoinRoom = 226,
+    JoinRandomGame = 225,
+    Leave = 254,
+    RaiseEvent = 253,
+    SetProperties = 252,
+    GetProperties = 251,
+    ChangeGroups = 248,
+    GetLobbyStats = 221,
+    GetRegions = 220,
+    ServerSettings = 218,
+    GetRoomList = 217,
+};
+
 enum class EgMessageType : unsigned char
 {
     Init = (unsigned char)0,
@@ -132,4 +151,14 @@ public:
     static constexpr byte OwnershipTransfer = 210;
     static constexpr byte VacantViewIds = 211;
     static constexpr byte OwnershipUpdate = 212;
+};
+
+class RpcTarget
+{
+public:
+    static constexpr byte All = 0;
+    static constexpr byte Others = 1;
+    static constexpr byte MasterClient = 2;
+    static constexpr byte AllBuffered = 3;
+    static constexpr byte OthersBuffered = 4;
 };

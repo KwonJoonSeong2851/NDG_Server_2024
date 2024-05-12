@@ -1,17 +1,14 @@
 #pragma once
 #include "../../stdafx.h"
+class Packet;
+class Object;
 
 
-/// <summary>
-/// Packet에 대한 인터페이스 클래스입니다.
-/// 이 클래스의 인터페이스 대로 여러 종류의 패킷을 처리합니다.
-/// </summary>
+
 class Packet
 {
 public:
 	virtual PacketType Type() = 0;
-	//virtual void Serialize(Stream& stream) { stream << (Int64)this->Type(); }
-	//virtual void Deserialize(Stream& stream) {}
 };
 
 
@@ -20,9 +17,9 @@ class PK_InitRequest : public Packet
 private:
 
 public:
-	PK_InitRequest(){}
+	PK_InitRequest() {}
 	~PK_InitRequest() {}
-	PacketType Type() {return E_InitRequest; }
+	PacketType Type() { return E_InitRequest; }
 
 	int size = 0;
 	byte* data = nullptr;
@@ -37,353 +34,153 @@ public:
 };
 
 
+class PK_OperationRequest : public  Packet
+{
+public:
+	byte m_operationCode;
+	unordered_map<byte, Object*>* m_parameters;
+	PK_OperationRequest() 
+	{
+		//typeInfo = &typeid(OperationRequest);
+		//this->dataPointer = (void*)this;
+		//size = sizeof(*this);
+		m_operationCode = (byte)0;
+		m_parameters = new unordered_map<byte, Object*>;
+	}
 
+	~PK_OperationRequest() 
+	{
+		for (auto it = m_parameters->begin(); it != m_parameters->end(); it++)
+		{
+			delete it->second;
+		}
+		delete m_parameters;
+	}
 
-//class PK_I_NOTIFY_TERMINAL : public Packet
-//{
-//public:
-//	PacketType Type() { return E_I_NOTIFY_TERMINAL; }
-//};
-//
-//class PK_C_REQ_ID_PW : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_ID_PW; }
-//
-//	std::string id;
-//	std::string password;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << id;
-//		stream << password;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &id;
-//		stream >> &password;
-//	}
-//
-//};
-//
-//class PK_I_ANS_ID_PW : public Packet
-//{
-//public:
-//	PacketType Type() { return E_I_ANS_ID_PW; }
-//
-//
-//
-//	UInt64 accountId;
-//	bool result;
-//
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << accountId;
-//		stream << result;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &accountId;
-//		stream >> &result;
-//	}
-//};
-//
-//class PK_C_REQ_SIGNIN : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_SIGNIN; }
-//
-//	std::string userId;
-//	std::string userPwd;
-//	std::string userNickName;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << userId;
-//		stream << userPwd;
-//		stream << userNickName;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &userId;
-//		stream >> &userPwd;
-//		stream >> &userNickName;
-//	}
-//};
-//
-//
-//
-//class PK_I_ANS_SIGNIN : public Packet
-//{
-//public:
-//	PacketType Type() { return E_I_ANS_SIGNIN; }
-//
-//	UINT32 result;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << result;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &result;
-//	}
-//};
-//
-//class PK_C_REQ_CHATTING : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_CHATTING; }
-//
-//	Int32 characterType;
-//	Int32 team;
-//	Int32 session;
-//	Int32 roomNumber;
-//
-//	std::string m_id;
-//	std::string m_text;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << characterType;
-//		stream << team;
-//		stream << session;
-//		stream << roomNumber;
-//
-//		stream << m_id;
-//		stream << m_text;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &characterType;
-//		stream >> &team;
-//		stream >> &session;
-//		stream >> &roomNumber;
-//
-//		stream >> &m_id;
-//		stream >> &m_text;
-//		
-//	}
-//};
-//
-//class PK_S_ANS_CHATTING : public Packet
-//{
-//public:
-//	PacketType Type() { return E_S_ANS_CHATTING; }
-//
-//	Int32 characterType;
-//	Int32 team;
-//	Int32 session;
-//	Int32 roomNumber;
-//
-//	std::wstring m_id;
-//	std::wstring m_text;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << characterType;
-//		stream << team;
-//		stream << session;
-//		stream << roomNumber;
-//
-//		stream << m_id;
-//		stream << m_text;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &characterType;
-//		stream >> &team;
-//		stream >> &session;
-//		stream >> &roomNumber;
-//
-//		stream >> &m_id;
-//		stream >> &m_text;
-//	}
-//};
-//
-//class PK_S_ANS_TEST : public Packet
-//{
-//public:
-//	PacketType Type() { return E_S_ANS_TEST; }
-//
-//	std::string m_testText; 
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << m_testText;
-//	}
-//
-//	void Desrialize(Stream& stream)
-//	{
-//		stream >> &m_testText;
-//	}
-//};
-//
-//
-//class PK_C_REQ_GET_TUTORIAL : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_GET_TUTORIAL; }
-//
-//	UInt64 accountId;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << accountId;
-//	}
-//
-//	void Desrialize(Stream& stream)
-//	{
-//		stream >> &accountId;
-//	}
-//};
-//
-//class PK_S_ANS_GET_TUTORIAL : public Packet
-//{
-//public:
-//	PacketType Type() { return E_S_ANS_GET_TUTORIAL; }
-//
-//	bool m_isTutorial;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << m_isTutorial;
-//	}
-//
-//	void Desrialize(Stream& stream)
-//	{
-//		stream >> &m_isTutorial;
-//	}
-//};
-//
-//class PK_C_REQ_SET_TUTORIAL : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_SET_TUTORIAL; }
-//	UInt64 accountId;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (INT64)this->Type();
-//		stream << accountId;
-//	}
-//
-//	void Desrialize(Stream& stream)
-//	{
-//		stream >> &accountId;
-//	}
-//};
-//
-//struct InGame_UserInfo
-//{
-//public:
-//	UInt64 account;
-//	string id;
-//	string nickName;
-//	UInt32 level;
-//	UInt64 experience;
-//	UInt32 win;
-//	UInt32 lose;
-//};
-//
-//class PK_C_REQ_USERINFO : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_USERINFO; }
-//
-//	UInt64 account;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << account;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &account;
-//	}
-//};
-//
-//class PK_I_ANS_USERINFO : public Packet
-//{
-//public:
-//	PacketType Type() { return E_I_ANS_USERINFO; }
-//
-//	bool result;
-//	UInt64 account;
-//	string id;
-//	wstring nickName;
-//	UInt32 level;
-//	UInt64 experience;
-//	UInt32 win;
-//	UInt32 lose;
-//
-//
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << account;
-//		stream << id;
-//		stream << nickName;
-//		stream << level;
-//		stream << experience;
-//		stream << win;
-//		stream << lose;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &account;
-//		stream >> &id;
-//		stream >> &nickName;
-//		stream >> &level;
-//		stream >> &experience;
-//		stream >> &win;
-//		stream >> &lose;
-//	}
-//};
-//
-//class PK_C_REQ_GAMERESULT : public Packet
-//{
-//public:
-//	PacketType Type() { return E_C_REQ_GAMERESULT; }
-//
-//	UInt64 account;
-//	UInt32 gameResult;
-//	UInt64 experience;
-//
-//	void Serialize(Stream& stream)
-//	{
-//		stream << (Int64)this->Type();
-//		stream << account;
-//		stream << gameResult;
-//		stream << experience;
-//	}
-//
-//	void Deserialize(Stream& stream)
-//	{
-//		stream >> &account;
-//		stream >> &gameResult;
-//		stream >> &experience;
-//	}
-//
-//};
-//
+	Object* operator[](ParameterCode paramCode)
+	{
+		return (*m_parameters)[(byte)paramCode];
+	}
+
+	PacketType Type() override
+	{
+		return E_OperationRequest;
+	}
+};
+
+class PK_OperationResponse : public Packet
+{
+public:
+	byte m_operationCode;
+	short m_returnCode;
+	wstring m_debugMessage;
+	
+	unordered_map<byte, Object*>* m_parameters;
+
+	PK_OperationResponse()
+	{
+		m_operationCode = 0;
+		m_returnCode = 0;
+		m_debugMessage = L"";
+		m_parameters = new unordered_map<byte, Object*>;
+	}
+
+	~PK_OperationResponse()
+	{
+		for (auto it = m_parameters->begin(); it != m_parameters->end(); it++)
+		{
+			delete it->second;
+		}
+		delete m_parameters;
+	}
+
+	Object* operator[](ParameterCode paramCode)
+	{
+		return (*m_parameters)[(byte)paramCode];
+	}
+
+	PacketType Type() override
+	{
+		return E_OperationResponse;
+	}
+};
+
+class PK_EventData : public Packet
+{
+private:
+	const byte SENDER_KEY = (byte)254;
+	const byte CUSTOM_DATA_KEY = (byte)245;
+
+	int m_sender = -1;
+public:
+	byte m_eventCode;
+	unordered_map<byte,Object*>* m_parameters;
+
+	PK_EventData()
+	{
+		m_eventCode = 0;
+		m_parameters = new unordered_map<byte, Object*>();
+	}
+
+	~PK_EventData()
+	{
+		for (auto p : *m_parameters)
+		{
+			delete p.second;
+		}
+	}
+
+	int GetSender()
+	{
+		if (m_sender == -1)
+		{
+			Object* obj = (*this)[SENDER_KEY];
+			m_sender = obj != nullptr ? **(generic_<int>*)obj : -1;
+		}
+		return m_sender;
+	}
+
+	void SetSender(int sender)
+	{
+		m_sender = sender;
+		if (m_parameters->find(SENDER_KEY) != m_parameters->end())
+		{
+			Object* value = (*m_parameters)[SENDER_KEY];
+			if (value != nullptr)
+				delete value;
+
+			m_parameters->insert(make_pair(SENDER_KEY, new generic_<int>(sender)));
+		}
+		else
+		{
+			m_parameters->insert(make_pair(SENDER_KEY, new generic_<int>(sender)));
+		}
+	}
+
+	void SetCustomData(Object* data)
+	{
+		if (m_parameters->find(CUSTOM_DATA_KEY) != m_parameters->end())
+		{
+			delete (*m_parameters)[CUSTOM_DATA_KEY];
+		}
+		m_parameters->insert(make_pair(CUSTOM_DATA_KEY, data));
+	}
+
+	Object* operator[](byte key)
+	{
+		return (*m_parameters)[key];
+	}
+
+	void Reset()
+	{
+		this->m_eventCode = (byte)0;
+		this->m_parameters->clear();
+		this->m_sender = -1;
+	}
+
+	PacketType Type() override
+	{
+		return E_EventData;
+	}
+
+};

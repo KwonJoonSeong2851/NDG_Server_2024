@@ -159,12 +159,6 @@ bool IOCPSession::IsRecving(size_t transferSize)
 {
 	if (m_ioData[IO_READ].NeedMoreIo(transferSize))
 	{
-		SLOG(L"NeedMoreIO !!! curByte = %d,  totalByte = %d", m_ioData[IO_READ].m_currentBytes, m_ioData[IO_READ].GetTotalBytes());
-		string s = "";
-		for (int i = 0; i < m_ioData[IO_READ].m_currentBytes; ++i)
-			s += (m_ioData[IO_READ].GetData())[i] + " ";
-		SLOG(L"NeedMoreIO DATA: %s", s.c_str());
-
 		this->Recv(m_ioData[IO_READ].GetWSABuf());
 		return true;
 	}
@@ -236,12 +230,11 @@ void IOCPSession::SendPacket(Packet* packet) // DeliverMode, channelID, opMessag
 	wsaBuf.len = (ULONG)stream.Length();
 
 	this->Send(wsaBuf);
-	this->RecvStandBy();
+	//this->RecvStandBy();
 }
 
 Package* IOCPSession::OnRecv(size_t transferSize)
 {
-	SLOG(L"Transfer size : %d ", transferSize);
 	packet_size_t offset = 0;
 	offset += m_ioData[IO_READ].SetupTotalBytes();
 
@@ -265,9 +258,7 @@ Package* IOCPSession::OnRecv(size_t transferSize)
 
 	if (packet == nullptr)
 	{
-		SLOG(L"IOCPSession : Invalid Packet !!! recev packet Size : %d", m_ioData[IO_READ].GetTotalBytes());
-	
-		cout << "Invalid Packet Data" << endl << endl << endl;
+		SLOG(L"IOCPSession : Invalid Packet !!! recev packet Size : %d", m_ioData[IO_READ].GetTotalBytes());	
 		this->OnClose();
 		return nullptr;
 	}

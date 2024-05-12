@@ -15,6 +15,7 @@ public:
 		typeInfo = &typeid(wstring_);
 		this->dataPointer = (void*)data.c_str();
 		size = 0;
+		isPrimitive = false;
 	}
 
 	wstring_(wstring ws)
@@ -23,6 +24,8 @@ public:
 		typeInfo = &typeid(wstring_);
 		this->dataPointer = (void*)data.c_str();
 		size = data.length() * sizeof(wchar_t);
+		isPrimitive = false;
+
 	}
 
 	~wstring_()

@@ -41,8 +41,7 @@ const type_info* Protocol18::GetTypeOfCode(GpType gpType)
 
 GpType Protocol18::GetCodeOfType(const Object* object)
 {
-	cout << "GetCodeOfType : " << object->GetType()->name() << endl;
-	if (object->GetType() == nullptr)
+	if (*object->GetType() == typeid(Object) && object->GetSize() == 0)
 	{
 		return GpType::Null;
 	}
@@ -65,7 +64,7 @@ GpType Protocol18::GetCodeOfType(const Object* object)
 		if (typeCode == typeid(double))
 			return GpType::Double;
 
-		return GpType::Unknown;
+		//return GpType::Unknown;
 	}
 
 	if (typeCode == typeid(wstring_) && object->IsArray() == false)
@@ -75,40 +74,74 @@ GpType Protocol18::GetCodeOfType(const Object* object)
 	{
 		if (object->IsPrimitive())
 		{
-			const type_info& elementType = *object->GetType();
-			if (elementType == typeid(bool))
+			if (typeCode == typeid(vector_<bool>))
 				return GpType::BooleanArray;
-			if (elementType == typeid(byte))
+			if (typeCode == typeid(vector_<byte>))
 				return GpType::ByteArray;
-			if (elementType == typeid(short))
+			if (typeCode == typeid(vector_<short>))
 				return GpType::ShortArray;
-			if (elementType == typeid(int))
+			if (typeCode == typeid(vector_<int>))
 				return GpType::CompressedIntArray;
-			if (elementType == typeid(long long))
+			if (typeCode == typeid(vector_<long long>))
 				return GpType::CompressedLongArray;
-			if (elementType == typeid(float))
+			if (typeCode == typeid(vector_<float>))
 				return GpType::FloatArray;
-			if (elementType == typeid(double))
+			if (typeCode == typeid(vector_<double>))
 				return GpType::DoubleArray;
 		}
 
-		const Object* element = object->GetElement();
-		if (element == nullptr)
-		{
-			throw runtime_error("The array type is unknown.");
-			return GpType::Unknown;
-		}
-		if (element->IsArray())
-			return GpType::Array;
-		if (*element->GetType() == typeid(wstring_))
+		if (typeCode == typeid(vector_<wstring_>))
 			return GpType::StringArray;
-		if (*element->GetType() == typeid(Object*))
+
+		if (typeCode == typeid(vector_<Object*>))
 			return GpType::ObjectArray;
-		if (*element->GetType() == typeid(Hashtable))
+
+		if (typeCode == typeid(vector_<Hashtable*>))
 			return GpType::HashtableArray;
-		if (*element->GetType() == typeid(Dictionary))
+
+		if (typeCode == typeid(vector_<Dictionary*>))
 			return GpType::DictionaryArray;
-		return GpType::CustomTypeArray;
+
+
+
+		//if (object->IsPrimitive())
+		//{
+		//	const type_info& elementType = *object->GetType();
+		//	if (elementType == typeid(bool))
+		//		return GpType::BooleanArray;
+		//	if (elementType == typeid(byte))
+		//		return GpType::ByteArray;
+		//	if (elementType == typeid(short))
+		//		return GpType::ShortArray;
+		//	if (elementType == typeid(int))
+		//		return GpType::CompressedIntArray;
+		//	if (elementType == typeid(long long))
+		//		return GpType::CompressedLongArray;
+		//	if (elementType == typeid(float))
+		//		return GpType::FloatArray;
+		//	if (elementType == typeid(double))
+		//		return GpType::DoubleArray;
+		//}
+
+		//const Object* element = object->GetElement();
+		//if (element == nullptr || element->GetType() ==nullptr)
+		//{
+		//	SLOG(L"KNOWN ARRAY TYPE :: %s", object->GetType()->name());
+		//	throw runtime_error("The array type is unknown.");
+		//	return GpType::Unknown;
+		//}
+		//if (element->IsArray())
+		//	return GpType::ObjectArray;
+		//	//return GpType::Array;
+		//if (*element->GetType() == typeid(wstring_))
+		//	return GpType::StringArray;
+		//if (*element->GetType() == typeid(Object))
+		//	return GpType::ObjectArray;
+		//if (*element->GetType() == typeid(Hashtable))
+		//	return GpType::HashtableArray;
+		//if (*element->GetType() == typeid(Dictionary))
+		//	return GpType::DictionaryArray;
+		//return GpType::CustomTypeArray;
 	}
 
 	if (typeCode == typeid(Hashtable))
@@ -126,7 +159,8 @@ GpType Protocol18::GetCodeOfType(const Object* object)
 	//if (typeCode == typeid(OperationResponse))
 	//	return GpType::OperationResponse;
 	
-	return GpType::Unknown;
+	SLOG(L"That type is an undefined type ::: %s", typeCode.name());
+	throw runtime_error("GetCodeOfType Failed");
 }
 
 
@@ -526,8 +560,6 @@ void Protocol18::WriteDictionaryHeader(StreamBuffer& stream,const Dictionary& di
 			stream.WriteByte((byte)valueType);
 	}
 
-	cout << "DIC KEY : " << (int)keyType << endl;
-	cout << "DIC VALUE : " << (int)valueType << endl;
 }
 
 
@@ -966,7 +998,6 @@ bool Protocol18::ReadDictionaryElements(StreamBuffer& stream, GpType& keyType, G
 	for (int i = 0; (long)i < (long)count; ++i)
 	{
 		Object* key;
-		cout << "READ KEY TYPE2 : " << (int)keyType << endl;
 		key = keyType == GpType::Unknown ? this->Read(stream) : this->Read(stream, (byte)keyType);
 		Object* value;
 		value = valueType == GpType::Unknown ? this->Read(stream) : this->Read(stream, (byte)valueType);
@@ -1138,11 +1169,9 @@ vector_<long long>* Protocol18::ReadCompressedInt64Array(StreamBuffer& stream)
 vector_<wstring_>* Protocol18::ReadStringArray(StreamBuffer& stream)
 {
 	vector_<wstring_>* strArray = new vector_<wstring_>(this->ReadCompressedUInt32(stream));
-	cout <<"string size size size:" <<  strArray->GetSize() << endl;
 	for (int i = 0; i < strArray->GetSize(); ++i)
 	{
 		(**strArray)[i] = this->ReadString(stream);
-		cout << "Read String string string string" << endl;
 	}
 	return strArray;
 }
@@ -1283,8 +1312,9 @@ void Protocol18::Write(StreamBuffer& stream, const Object* value, GpType gpType,
 	case GpType::Hashtable:
 		this->WriteHashTable(stream, *(Hashtable*)value, writeType);
 		break;
-	//case GpType::ObjectArray:
-	//	break;
+	case GpType::ObjectArray:
+		this->WriteObjectArray(stream, **(vector_<Object*>*)value, writeType);
+		break;
 	//case GpType::OperationRequest:
 	//	this->SerializeOperationRequest(stream, *(OperationRequest*)value, writeType);
 	//	break;
@@ -1333,6 +1363,7 @@ void Protocol18::Write(StreamBuffer& stream, const Object* value, GpType gpType,
 		break;
 
 	default:
+		SLOG(L"Write Falied. the current data is an undefined data type. current data[%d]", gpType);
 		throw runtime_error("Uknown type");
 		break;
 	}
@@ -1346,8 +1377,6 @@ void Protocol18::Serialize(StreamBuffer& stream,const Object* object, bool setTy
 
 Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 {
-	cout << "STREM GPTYPE : " << (int)gpType << endl;
-	//if customType
 	switch (gpType)
 	{
 	case (byte)2:
@@ -1381,7 +1410,7 @@ Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 	case (byte)17:
 		return new generic_<long long>(this->ReadInt2(stream, false));
 	case (byte)18:
-	    return new generic_<long long>(this->ReadInt2(stream, true));
+		return new generic_<long long>(this->ReadInt2(stream, true));
 	case (byte)20:
 		return this->ReadDictionary(stream);
 	case (byte)21:
@@ -1389,10 +1418,10 @@ Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 	case (byte)23:
 		return this->ReadObjectArray(stream);
 
-	//case (byte)24:
-	//	return this->DeserializeOperationRequest(stream);
-	//case (byte)25:
-	//	return this->DeserializeOperationResponse(stream);
+		//case (byte)24:
+		//	return this->DeserializeOperationRequest(stream);
+		//case (byte)25:
+		//	return this->DeserializeOperationResponse(stream);
 
 	case (byte)27:
 	{
@@ -1444,32 +1473,31 @@ Object* Protocol18::Read(StreamBuffer& stream, byte gpType)
 		return this->ReadCompressedInt32Array(stream);
 	case (byte)74:
 		return this->ReadCompressedInt64Array(stream);
-	//case (byte)83:
-	//	return this->ReadCustomTypeArray(stream);
+		//case (byte)83:
+		//	return this->ReadCustomTypeArray(stream);
 	case (byte)84:
 		return this->ReadDictionaryArray(stream);
 	case (byte)85:
 		return this->ReadHashtableArray(stream);
 
-	//case (byte)81:
-	//	return this->ReadQuaternion(stream);
-	//case(byte)86:
-	//	return this->ReadVector3(stream);
+		//case (byte)81:
+		//	return this->ReadQuaternion(stream);
+		//case(byte)86:
+		//	return this->ReadVector3(stream);
 
 	case (byte)209:
 		return this->ReadQuaternion(stream);
 	case (byte)214:
 		return this->ReadVector3(stream);
 
-		
+
 
 	default:
 	{
+		SLOG(L"READ DEFAULT TYPE CODE [%d] ", gpType);
 		return new Object();
-		/*string s = "Read Fail. Type : " + gpType;
-		throw std::runtime_error(s);*/
 	}
-			break;
+	break;
 	}
 }
 
@@ -1525,14 +1553,7 @@ PK_OperationRequest* Protocol18::DeserializeOperationRequest(StreamBuffer& strea
 	PK_OperationRequest* op = new PK_OperationRequest();
 	op->m_operationCode = stream.ReadByte();
 	op->m_parameters = this->ReadParameterTable(stream);
-
-	for (auto it = op->m_parameters->begin(); it != op->m_parameters->end(); ++it)
-	{
-		cout << "Pram Code : " << (int)it->first << endl;
-		cout << "TYPE : " << it->second->GetType()->name() << endl;
-	}
 	return op;
-	//return &OperationRequest();
 }
 
 PK_OperationResponse* Protocol18::DeserializeOperationResponse(StreamBuffer& stream)

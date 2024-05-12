@@ -12,17 +12,9 @@ PacketAnalyzer::~PacketAnalyzer()
 Packet* PacketAnalyzer::Analyzer(const char* rowPacket, size_t size)
 {
 
-	//StreamBuffer stream((byte*)rowPacket, size);
-	cout << "packetData:" << endl;
-	for (int i = 0; i < size; ++i)
-	{
-		cout << (unsigned char)(rowPacket[i]) << " ";
-	}
-	cout << endl << endl;
 
 	unsigned char messageType = (const unsigned char)rowPacket[8];
 
-	//Packet* packet = nullptr;
 
 	switch (messageType)
 	{
