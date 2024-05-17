@@ -76,9 +76,6 @@ void Peer::OnOtherPlayerEnteredRoom(Peer* other)
 {
 }
 
-void Peer::OnPropertiesChanged(Hashtable* props)
-{
-}
 
 void Peer::CacheProperties(Hashtable* hash)
 {

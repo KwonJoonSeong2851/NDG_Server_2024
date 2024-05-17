@@ -100,11 +100,6 @@ void C_UnityPeer::OnOtherPlayerEnteredRoom(Peer* other)
 
 }
 
-void C_UnityPeer::OnPropertiesChanged(Hashtable* props)
-{
-	Peer::OnPropertiesChanged(props);
-
-}
 
 
 

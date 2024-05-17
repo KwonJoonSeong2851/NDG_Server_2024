@@ -49,9 +49,6 @@ public:
 
 	virtual void OnOtherPlayerEnteredRoom(Peer* other);
 
-	//In Room
-	virtual void OnPropertiesChanged(Hashtable* props);
-
 
 	void CacheProperties(Hashtable* hash);
 
@@ -67,10 +64,5 @@ public:
 	ServerConnection GetServerConnection();
     void SetServerConnection(ServerConnection server);
 
-
-
-	//virtual void OnEvent(EventData eventData);
-
-	//Peer() = default;
 };
 

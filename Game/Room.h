@@ -29,23 +29,25 @@ public:
 	Room(wstring name, Hashtable* hash, Lobby* looby, int roomNumber);
 	~Room();
 
-	bool AddPeer(Peer* peer);
 	void CacheProperties(Hashtable* roomProperties);
+
+	bool AddPeer(Peer* peer);
 	void OnRoomPropertiesChanged(Hashtable* changedHash);
 	void OnPlayerPropertiesChanged(int target, Hashtable* changedHash);
-
-	//분리 필요해보임
 	void OnInstantiationGO(Peer* sender, Object* eventContent);
 	void OnSerialize(Peer* sender, Object* eventContent);
 	void OnRPC(Peer* sender, Object* eventContent);
 
-	wstring GetName();
-	list<Peer*>& GetPlayerList();
+	void BroadcastPacket(Peer* sender, Packet* packet, const byte target = BroadcastTarget::All);
+
+
 	/// <summary>
 	/// Response에 필요한 방의 정보를 Hashtable에 입력후 반환합니다
 	/// </summary>
 	/// <param name="lobby">true일시 lobby상태에서 필요한 정보만 반환합니다 </param>
 	/// <returns></returns>
 	Hashtable* RoomInfoToHashtable(bool lobby);
+	wstring GetName();
+	list<Peer*>& GetPlayerList();
 	Hashtable* GetPlayersProperties();
 };

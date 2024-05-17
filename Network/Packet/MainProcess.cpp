@@ -95,7 +95,8 @@ void MainProcess::OperationRequestProcess(Session* session, Packet* rowPacket)
 			SLOG(L"Player properties changed");
 			int targetActor = **(generic_<int>*)op[ParameterCode::ActorNr];
 			peer->CacheProperties(properties);
-			peer->GetCurrentRoom()->OnPlayerPropertiesChanged(targetActor, properties);
+			if (peer->GetCurrentRoom() != nullptr)
+				peer->GetCurrentRoom()->OnPlayerPropertiesChanged(targetActor, properties);
 		}
 		else
 		{
@@ -140,6 +141,7 @@ void MainProcess::EventDataProcess(Session* session, byte eventCode, Object* eve
 		break;
 
 	case GameEventCode::RPC:
+		SLOG(L"RPC EVENT : ");
 		session->GetPeer()->GetCurrentRoom()->OnRPC(session->GetPeer(), eventContent);
 		break;
 

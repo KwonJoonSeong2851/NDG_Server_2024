@@ -58,10 +58,7 @@ void Room::OnRoomPropertiesChanged(Hashtable* changedHash)
 	ev->m_parameters->insert(make_pair((byte)ParameterCode::Properties, changedHash->Copy()));
 
 
-	for (auto p : m_playerList)
-	{
-		p->SendPacket(ev);
-	}
+	BroadcastPacket(nullptr, ev, BroadcastTarget::All);
 
 	SAFE_DELETE(ev);
 }
@@ -88,26 +85,20 @@ void Room::OnPlayerPropertiesChanged(int target, Hashtable* changedHash)
 	ev->m_parameters->insert(make_pair((byte)ParameterCode::TargetActorNr, new generic_<int>(target)));
 	ev->m_parameters->insert(make_pair((byte)ParameterCode::Properties, changedHash->Copy()));
 
-	for (auto p : m_playerList)
-	{
-		p->SendPacket(ev);
-	}
+	BroadcastPacket(nullptr, ev, BroadcastTarget::All);
+
+	SAFE_DELETE(ev);
 
 }
 
 void Room::OnInstantiationGO(Peer* sender, Object* eventContent)
 {
-	SAFE_LOCK(m_lock);
 	PK_EventData* ev = new PK_EventData();
 	ev->SetSender(sender->GetActorNumber());
 	ev->m_eventCode = GameEventCode::Instantiation;
 	ev->SetCustomData(eventContent->Copy());
 
-	for (auto p : m_playerList)
-	{
-		if (sender->GetActorNumber() != p->GetActorNumber())
-			p->SendPacket(ev);
-	}
+	BroadcastPacket(sender, ev, BroadcastTarget::Others);
 
 	SAFE_DELETE(ev);
 }
@@ -120,11 +111,7 @@ void Room::OnSerialize(Peer* sender, Object* eventContent)
 	ev->m_eventCode = GameEventCode::SendSerialize;
 	ev->m_parameters->insert(make_pair((byte)ParameterCode::Data, eventContent->Copy()));
 
-	for (auto p : m_playerList)
-	{
-		if (p->GetActorNumber() != senderActorNum)
-			p->SendPacket(ev);
-	}
+	BroadcastPacket(sender, ev, BroadcastTarget::Others);
 
 	SAFE_DELETE(ev);
 }
@@ -136,13 +123,29 @@ void Room::OnRPC(Peer* sender, Object* eventContent)
 	ev->m_eventCode = GameEventCode::RPC;
 	ev->SetCustomData(eventContent->Copy());
 
-	for (auto p : m_playerList)
-	{
-		if (p->GetActorNumber() != ev->GetSender())
-			p->SendPacket(ev);
-	}
+	BroadcastPacket(sender, ev, BroadcastTarget::Others);
 
 	SAFE_DELETE(ev);
+}
+
+void Room::BroadcastPacket(Peer* sender, Packet* packet, const byte target)
+{
+	SAFE_LOCK(m_lock);
+	switch (target)
+	{
+	case BroadcastTarget::All:
+		for (auto p : m_playerList)
+			p->SendPacket(packet);
+		break;
+
+	case BroadcastTarget::Others:
+		for (auto p : m_playerList)
+		{
+			if (p->GetActorNumber() != sender->GetActorNumber())
+				p->SendPacket(packet);
+		}
+		break;
+	}
 }
 
 wstring Room::GetName()

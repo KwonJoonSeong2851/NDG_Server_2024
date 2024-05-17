@@ -162,3 +162,10 @@ public:
     static constexpr byte AllBuffered = 3;
     static constexpr byte OthersBuffered = 4;
 };
+
+class BroadcastTarget
+{
+public:
+    static constexpr byte All = 0;
+    static constexpr byte Others = 1;
+};

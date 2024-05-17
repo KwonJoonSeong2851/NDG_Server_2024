@@ -36,8 +36,6 @@ public:
 
 	virtual void OnOtherPlayerEnteredRoom(Peer* other);
 
-	//InRoom
-	virtual void OnPropertiesChanged(Hashtable* props);
 
 	
 };
